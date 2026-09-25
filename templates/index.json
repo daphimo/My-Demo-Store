@@ -267,7 +267,7 @@
       "type": "featured-collection",
       "name": "Featured collection",
       "settings": {
-        "collection": "just-in-newly-added-products",
+        "collection": "new-arrivals",
         "caption": "JUST DROPPED",
         "title": "New arrivals you'll love 🌸",
         "view_more_text": "VIEW MORE",
