@@ -1,0 +1,175 @@
+{{ 'section-custom-email-signup.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --email-signup-page-width: {{ settings.page_width | divided_by: 10.0 }}rem;
+    --email-signup-margin-top: {{ section.settings.margin_top }}px;
+    --email-signup-margin-bottom: {{ section.settings.margin_bottom }}px;
+    --email-signup-background: {{ section.settings.background_color }};
+    --email-signup-text: {{ section.settings.text_color }};
+    --email-signup-radius: {{ section.settings.border_radius }}px;
+  }
+{%- endstyle -%}
+
+<section class="custom-email-signup" aria-labelledby="EmailSignupTitle-{{ section.id }}">
+  <div class="custom-email-signup__page">
+    <div class="custom-email-signup__inner">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'title' -%}
+            {%- if block.settings.title != blank -%}
+              <{{ block.settings.heading_tag }}
+                class="custom-email-signup__title"
+                id="EmailSignupTitle-{{ section.id }}"
+                style="--title-size: {{ block.settings.title_size }}px; --title-color: {{ block.settings.title_color }};"
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.title }}
+              </{{ block.settings.heading_tag }}>
+            {%- endif -%}
+
+          {%- when 'content' -%}
+            {%- if block.settings.content != blank -%}
+              <div
+                class="custom-email-signup__content rte"
+                style="--content-size: {{ block.settings.content_size }}px; --content-color: {{ block.settings.content_color }};"
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.content }}
+              </div>
+            {%- endif -%}
+
+          {%- when 'email_form' -%}
+            <div class="custom-email-signup__form-wrap" {{ block.shopify_attributes }}>
+              {%- form 'customer', class: 'custom-email-signup__form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <div class="custom-email-signup__field-row">
+                  <label class="visually-hidden" for="EmailSignup-{{ section.id }}-{{ block.id }}">
+                    {{ block.settings.placeholder | escape }}
+                  </label>
+                  <input
+                    id="EmailSignup-{{ section.id }}-{{ block.id }}"
+                    class="custom-email-signup__input"
+                    type="email"
+                    name="contact[email]"
+                    value="{{ form.email }}"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    autocomplete="email"
+                    placeholder="{{ block.settings.placeholder | escape }}"
+                    required
+                    {% if form.errors %}aria-invalid="true" aria-describedby="EmailSignupError-{{ section.id }}-{{ block.id }}"{% elsif form.posted_successfully? %}aria-describedby="EmailSignupSuccess-{{ section.id }}-{{ block.id }}"{% endif %}
+                  >
+                  <button
+                    class="custom-email-signup__button"
+                    type="submit"
+                    name="commit"
+                    style="--signup-button-bg: {{ block.settings.button_background }}; --signup-button-color: {{ block.settings.button_text_color }};"
+                  >
+                    <span>{{ block.settings.button_label | escape }}</span>
+                    {%- if block.settings.show_arrow -%}
+                      <span class="custom-email-signup__button-icon" aria-hidden="true">{% render 'icons', icon: 'arrow-right' %}</span>
+                    {%- endif -%}
+                  </button>
+                </div>
+
+                {%- if form.errors -%}
+                  <small class="custom-email-signup__message" id="EmailSignupError-{{ section.id }}-{{ block.id }}">
+                    {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+                  </small>
+                {%- endif -%}
+                {%- if form.posted_successfully? -%}
+                  <p class="custom-email-signup__message custom-email-signup__message--success" id="EmailSignupSuccess-{{ section.id }}-{{ block.id }}" tabindex="-1" autofocus>
+                    {{ block.settings.success_message }}
+                  </p>
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {%- assign trust_item_count = 0 -%}
+      <div class="custom-email-signup__trust" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'trust_item' and block.settings.text != blank -%}
+            {%- if trust_item_count > 0 -%}<span class="custom-email-signup__dot" aria-hidden="true"></span>{%- endif -%}
+            <span class="custom-email-signup__trust-item" role="listitem" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</span>
+            {%- assign trust_item_count = trust_item_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Custom email signup",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#3A1928" },
+    { "type": "color", "id": "text_color", "label": "Default text color", "default": "#FFFFFF" },
+    { "type": "range", "id": "border_radius", "label": "Corner radius", "min": 0, "max": 60, "step": 2, "unit": "px", "default": 26 },
+    { "type": "header", "content": "Section spacing" },
+    { "type": "range", "id": "margin_top", "label": "Top margin", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 28 },
+    { "type": "range", "id": "margin_bottom", "label": "Bottom margin", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 28 }
+  ],
+  "blocks": [
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Your everyday called. It wants more joy. ✨" },
+        { "type": "select", "id": "heading_tag", "label": "Heading tag", "default": "h2", "options": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }, { "value": "p", "label": "Paragraph" }] },
+        { "type": "range", "id": "title_size", "label": "Title size", "min": 20, "max": 64, "step": 1, "unit": "px", "default": 30 },
+        { "type": "color", "id": "title_color", "label": "Title color", "default": "#FFFFFF" }
+      ]
+    },
+    {
+      "type": "content",
+      "name": "Content",
+      "limit": 1,
+      "settings": [
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Join our list for joyful finds, new arrivals, and special offers.</p>" },
+        { "type": "range", "id": "content_size", "label": "Text size", "min": 12, "max": 28, "step": 1, "unit": "px", "default": 15 },
+        { "type": "color", "id": "content_color", "label": "Text color", "default": "#E8DCE1" }
+      ]
+    },
+    {
+      "type": "email_form",
+      "name": "Email signup field",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "placeholder", "label": "Email placeholder", "default": "Enter your email" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Join the fun" },
+        { "type": "color", "id": "button_background", "label": "Button background", "default": "#E94791" },
+        { "type": "color", "id": "button_text_color", "label": "Button text color", "default": "#FFFFFF" },
+        { "type": "checkbox", "id": "show_arrow", "label": "Show arrow", "default": true },
+        { "type": "text", "id": "success_message", "label": "Success message", "default": "Thanks for signing up!" }
+      ]
+    },
+    {
+      "type": "trust_item",
+      "name": "Bottom text item",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Secure payments" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom email signup",
+      "blocks": [
+        { "type": "title" },
+        { "type": "content" },
+        { "type": "email_form" },
+        { "type": "trust_item", "settings": { "text": "Secure payments" } },
+        { "type": "trust_item", "settings": { "text": "Carefully packed" } },
+        { "type": "trust_item", "settings": { "text": "Made for gifting 💌" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

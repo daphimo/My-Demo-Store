@@ -1,0 +1,204 @@
+{{ 'section-image-with-text-custom.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign fetch_priority = 'auto'
+  assign image_loading = 'lazy'
+  if section.index == 1
+    assign fetch_priority = 'high'
+    assign image_loading = 'eager'
+  endif
+-%}
+
+<div
+  class="custom-image-with-text-wrap"
+  style="--section-page-width: {{ settings.page_width | divided_by: 10.0 }}rem; --iwt-padding-top: {{ section.settings.padding_top }}px; --iwt-padding-bottom: {{ section.settings.padding_bottom }}px; --iwt-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --iwt-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px;"
+>
+  <section
+    class="custom-image-with-text custom-image-with-text--{{ section.settings.image_position }}"
+    style="--iwt-background: {{ section.settings.background_color }}; --iwt-image-position: {{ section.settings.image_object_position }};"
+  >
+    <div class="custom-image-with-text__media">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1800
+          | image_tag:
+            class: 'custom-image-with-text__image',
+            widths: '375, 550, 750, 900, 1200, 1500, 1800',
+            sizes: '(max-width: 749px) calc(100vw - 32px), 50vw',
+            loading: image_loading,
+            fetchpriority: fetch_priority,
+            alt: section.settings.image.alt
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'custom-image-with-text__placeholder' }}
+      {%- endif -%}
+    </div>
+
+    <div class="custom-image-with-text__content">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'title' -%}
+            {%- if block.settings.title != blank -%}
+              <{{ block.settings.heading_tag }}
+                class="custom-image-with-text__title"
+                style="--iwt-title-size: {{ block.settings.heading_size }}px; --iwt-title-color: {{ block.settings.heading_color }};"
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.title }}
+              </{{ block.settings.heading_tag }}>
+            {%- endif -%}
+
+          {%- when 'content' -%}
+            {%- if block.settings.content != blank -%}
+              <div
+                class="custom-image-with-text__text rte"
+                style="--iwt-content-size: {{ block.settings.content_size }}px; --iwt-content-color: {{ block.settings.content_color }};"
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.content }}
+              </div>
+            {%- endif -%}
+
+          {%- when 'icon_text' -%}
+            {%- liquid
+              assign previous_is_icon = false
+              assign next_is_icon = false
+              unless forloop.first
+                assign previous_index = forloop.index0 | minus: 1
+                assign previous_block = section.blocks[previous_index]
+                if previous_block.type == 'icon_text'
+                  assign previous_is_icon = true
+                endif
+              endunless
+              unless forloop.last
+                assign next_block = section.blocks[forloop.index]
+                if next_block.type == 'icon_text'
+                  assign next_is_icon = true
+                endif
+              endunless
+            -%}
+            {%- unless previous_is_icon -%}<div class="custom-image-with-text__icon-list">{%- endunless -%}
+            {%- if block.settings.text != blank -%}
+              <div
+                class="custom-image-with-text__icon-text"
+                style="--iwt-icon-color: {{ block.settings.icon_color }}; --iwt-icon-size: {{ block.settings.icon_size }}px; --iwt-icon-text-color: {{ block.settings.text_color }}; --iwt-icon-text-size: {{ block.settings.text_size }}px;"
+                {{ block.shopify_attributes }}
+              >
+                {%- unless block.settings.icon == 'none' -%}<span class="custom-image-with-text__icon">{% render 'icons', icon: block.settings.icon %}</span>{%- endunless -%}
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {%- endif -%}
+            {%- unless next_is_icon -%}</div>{%- endunless -%}
+
+          {%- when 'button' -%}
+            {%- liquid
+              assign previous_is_button = false
+              assign next_is_button = false
+              unless forloop.first
+                assign previous_index = forloop.index0 | minus: 1
+                assign previous_block = section.blocks[previous_index]
+                if previous_block.type == 'button'
+                  assign previous_is_button = true
+                endif
+              endunless
+              unless forloop.last
+                assign next_block = section.blocks[forloop.index]
+                if next_block.type == 'button'
+                  assign next_is_button = true
+                endif
+              endunless
+            -%}
+            {%- unless previous_is_button -%}<div class="custom-image-with-text__buttons">{%- endunless -%}
+            {% render 'button',
+              text: block.settings.text,
+              link: block.settings.link,
+              background: block.settings.background,
+              text_color: block.settings.text_color,
+              show_arrow: block.settings.show_arrow,
+              open_in_new_tab: block.settings.open_in_new_tab,
+              class: 'custom-image-with-text__button',
+              icon_class: 'custom-image-with-text__button-icon',
+              attributes: block.shopify_attributes
+            %}
+            {%- unless next_is_button -%}</div>{%- endunless -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "tag": "section",
+  "class": "custom-image-with-text-section section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "select", "id": "image_position", "label": "Image position", "default": "left", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }] },
+    { "type": "select", "id": "image_object_position", "label": "Image focal point", "default": "center", "options": [{ "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }, { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }] },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Desktop top spacing", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom spacing", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top spacing", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom spacing", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "title", "name": "Title", "limit": 2,
+      "settings": [
+        { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Make your everyday a little more Pinteresty. ✨" },
+        { "type": "select", "id": "heading_tag", "label": "Heading tag", "default": "h2", "options": [{ "value": "h1", "label": "H1" }, { "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }, { "value": "h4", "label": "H4" }, { "value": "h5", "label": "H5" }, { "value": "h6", "label": "H6" }] },
+        { "type": "range", "id": "heading_size", "label": "Heading size", "min": 20, "max": 64, "step": 1, "unit": "px", "default": 32 },
+        { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#241226" }
+      ]
+    },
+    {
+      "type": "content", "name": "Content", "limit": 3,
+      "settings": [
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>A bottle for your commute.<br>A notebook for your thoughts.<br>A little charm for your bag.<br>Beautiful things for the moments you live every day.</p>" },
+        { "type": "range", "id": "content_size", "label": "Text size", "min": 12, "max": 28, "step": 1, "unit": "px", "default": 15 },
+        { "type": "color", "id": "content_color", "label": "Text color", "default": "#7A5368" }
+      ]
+    },
+    {
+      "type": "icon_text", "name": "Icon + text",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "sparkles", "options": [{ "value": "sparkles", "label": "Sparkles" }, { "value": "star", "label": "Star" }, { "value": "truck", "label": "Truck" }, { "value": "rotate", "label": "Rotate" }, { "value": "arrow-right", "label": "Arrow right" }, { "value": "none", "label": "None" }] },
+        { "type": "inline_richtext", "id": "text", "label": "Text", "default": "Beautiful things for everyday moments" },
+        { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#E64D95" },
+        { "type": "color", "id": "text_color", "label": "Text color", "default": "#241226" },
+        { "type": "range", "id": "icon_size", "label": "Icon size", "min": 10, "max": 32, "step": 1, "unit": "px", "default": 16 },
+        { "type": "range", "id": "text_size", "label": "Text size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 14 }
+      ]
+    },
+    {
+      "type": "button", "name": "Button", "limit": 2,
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Shop the look" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "color", "id": "background", "label": "Background color", "default": "#E64D95" },
+        { "type": "color", "id": "text_color", "label": "Text color", "default": "#FFFFFF" },
+        { "type": "checkbox", "id": "show_arrow", "label": "Show arrow", "default": true },
+        { "type": "checkbox", "id": "open_in_new_tab", "label": "Open in a new tab", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text",
+      "blocks": [
+        { "type": "title" },
+        { "type": "content" },
+        { "type": "icon_text", "settings": { "icon": "sparkles", "text": "Beautiful things for everyday moments" } },
+        { "type": "icon_text", "settings": { "icon": "star", "text": "Little joys for every day" } },
+        { "type": "button", "settings": { "text": "Shop the look", "link": "#", "background": "#E64D95", "text_color": "#FFFFFF", "show_arrow": true } },
+        { "type": "button", "settings": { "text": "Explore more", "link": "#", "background": "#FFFFFF", "text_color": "#241226", "show_arrow": true } }
+      ]
+    }
+  ]
+}
+{% endschema %}

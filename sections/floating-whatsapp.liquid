@@ -1,0 +1,77 @@
+{%- liquid
+  assign whatsapp_number = section.settings.whatsapp_number
+  assign fallback_number = whatsapp_number | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' | remove: '.'
+-%}
+
+{%- if whatsapp_number != blank -%}
+  <div
+    class="cust__whatsapp cust__whatsapp--{{ section.id }}{% if section.settings.enable_pulse %} cust__whatsapp--pulse{% endif %}{% unless section.settings.enable_mobile %} cust__whatsapp--hide-mobile{% endunless %}{% unless section.settings.enable_desktop %} cust__whatsapp--hide-desktop{% endunless %}"
+    style="--cust-whatsapp-size: {{ section.settings.button_size }}px; --cust-whatsapp-bottom: {{ section.settings.bottom_spacing }}px; --cust-whatsapp-right: {{ section.settings.right_spacing }}px;"
+    data-cust-whatsapp
+    data-number="{{ whatsapp_number | escape }}"
+    data-message="{{ section.settings.message | escape }}"
+    {{ section.shopify_attributes }}
+  >
+    <a
+      class="cust__whatsapp-link"
+      href="https://wa.me/{{ fallback_number }}{% if section.settings.message != blank %}?text={{ section.settings.message | url_encode }}{% endif %}"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="{{ section.settings.accessible_label | escape }}"
+    >
+      <svg class="cust__whatsapp-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M16.04 3A12.86 12.86 0 0 0 5.01 22.48L3.2 29l6.68-1.75A12.88 12.88 0 1 0 16.04 3Zm0 2.17a10.7 10.7 0 1 1-5.46 19.9l-.39-.23-3.96 1.04 1.06-3.86-.25-.4a10.7 10.7 0 0 1 9-16.45Zm-5.26 4.61c-.24 0-.62.09-.94.44-.33.36-1.24 1.21-1.24 2.95s1.27 3.43 1.44 3.66c.18.24 2.49 3.8 6.03 5.33.84.36 1.5.58 2.02.74.85.27 1.61.23 2.22.14.68-.1 2.09-.86 2.38-1.68.3-.83.3-1.54.21-1.69-.08-.15-.32-.24-.68-.41-.35-.18-2.09-1.03-2.41-1.15-.33-.12-.56-.18-.8.18-.23.35-.91 1.15-1.12 1.39-.2.23-.41.26-.77.08-.35-.17-1.5-.55-2.85-1.76a10.7 10.7 0 0 1-1.97-2.45c-.2-.35-.02-.55.16-.72.16-.16.35-.41.53-.62.18-.2.24-.35.35-.59.12-.23.06-.44-.03-.62-.09-.17-.8-1.91-1.09-2.62-.29-.69-.58-.6-.8-.61h-.68Z"/>
+      </svg>
+    </a>
+  </div>
+
+  <style>
+    .cust__whatsapp--{{ section.id }}{position:fixed;right:var(--cust-whatsapp-right);bottom:var(--cust-whatsapp-bottom);z-index:35;width:var(--cust-whatsapp-size);height:var(--cust-whatsapp-size);max-width:calc(100vw - 2rem);max-height:calc(100vh - 2rem);isolation:isolate}
+    .cust__whatsapp--{{ section.id }} .cust__whatsapp-link{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:0;color:#fff;text-decoration:none;background:#25d366;border-radius:50%;box-shadow:0 .6rem 1.8rem rgba(20,92,53,.28);transition:transform 180ms ease,box-shadow 180ms ease}
+    .cust__whatsapp--{{ section.id }} .cust__whatsapp-icon{display:block;width:56%;height:56%}
+    .cust__whatsapp--{{ section.id }} .cust__whatsapp-link:focus-visible{outline:.3rem solid #241226;outline-offset:.4rem}
+    .cust__whatsapp--{{ section.id }}.cust__whatsapp--pulse::before{position:absolute;inset:0;z-index:-1;border:.2rem solid rgba(37,211,102,.55);border-radius:50%;content:'';animation:cust-whatsapp-pulse-{{ section.id }} 2.4s ease-out infinite;pointer-events:none}
+    @media (hover:hover){.cust__whatsapp--{{ section.id }} .cust__whatsapp-link:hover{box-shadow:0 .9rem 2.4rem rgba(20,92,53,.38);transform:scale(1.06)}}
+    @media screen and (max-width:749px){.cust__whatsapp--{{ section.id }}{right:min(var(--cust-whatsapp-right),15px);bottom:min(var(--cust-whatsapp-bottom),15px);width:max(44px,calc(var(--cust-whatsapp-size) - 4px));height:max(44px,calc(var(--cust-whatsapp-size) - 4px))}.cust__whatsapp--{{ section.id }}.cust__whatsapp--hide-mobile{display:none}}
+    @media screen and (min-width:750px){.cust__whatsapp--{{ section.id }}.cust__whatsapp--hide-desktop{display:none}}
+    @media (prefers-reduced-motion:reduce){.cust__whatsapp--{{ section.id }}.cust__whatsapp--pulse::before{animation:none}.cust__whatsapp--{{ section.id }} .cust__whatsapp-link{transition:none}}
+    @keyframes cust-whatsapp-pulse-{{ section.id }}{0%{opacity:.7;transform:scale(1)}70%,100%{opacity:0;transform:scale(1.42)}}
+  </style>
+
+  <script>
+    (() => {
+      const root = document.querySelector('.cust__whatsapp--{{ section.id }}');
+      if (!root || root.dataset.initialized === 'true') return;
+      root.dataset.initialized = 'true';
+      const number = (root.dataset.number || '').replace(/\D/g, '');
+      const message = root.dataset.message || '';
+      const link = root.querySelector('.cust__whatsapp-link');
+      if (!number || !link) {
+        root.hidden = true;
+        return;
+      }
+      link.href = `https://wa.me/${number}${message ? `?text=${encodeURIComponent(message)}` : ''}`;
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Floating WhatsApp",
+  "tag": "section",
+  "class": "cust__whatsapp-section",
+  "settings": [
+    { "type": "text", "id": "whatsapp_number", "label": "WhatsApp Number", "info": "Include the country code, for example +91 98765 43210.", "default": "+91 85840 72905" },
+    { "type": "textarea", "id": "message", "label": "Pre-typed Message", "default": "Hello, I would like to know more about your products." },
+    { "type": "text", "id": "accessible_label", "label": "Accessible label", "default": "Chat with us on WhatsApp" },
+    { "type": "checkbox", "id": "enable_pulse", "label": "Enable Pulse Animation", "default": true },
+    { "type": "range", "id": "button_size", "label": "Button Size", "min": 44, "max": 72, "step": 2, "unit": "px", "default": 56 },
+    { "type": "range", "id": "bottom_spacing", "label": "Bottom Spacing", "min": 10, "max": 100, "step": 5, "unit": "px", "default": 20 },
+    { "type": "range", "id": "right_spacing", "label": "Right Spacing", "min": 10, "max": 100, "step": 5, "unit": "px", "default": 20 },
+    { "type": "checkbox", "id": "enable_mobile", "label": "Enable on Mobile", "default": true },
+    { "type": "checkbox", "id": "enable_desktop", "label": "Enable on Desktop", "default": true }
+  ],
+  "presets": [{ "name": "Floating WhatsApp" }],
+  "enabled_on": { "groups": ["footer"] }
+}
+{% endschema %}

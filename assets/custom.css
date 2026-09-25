@@ -1,0 +1,11 @@
+fieldset {
+    display: block;
+    min-inline-size: min-content;
+    margin-inline: 2px;
+    border-width: 2px;
+    border-style: none !important;
+    border-color: threedface;
+    border-image: none;
+    padding-block: 0.35em 0.625em;
+    padding-inline: 0.75em;
+}

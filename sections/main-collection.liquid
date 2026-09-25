@@ -1,0 +1,138 @@
+{{ 'section-main-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-pagination.css' | asset_url | stylesheet_tag }}
+{{ 'quick-add.css' | asset_url | stylesheet_tag }}
+
+{{ 'component-product-card-custom.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-product-card-custom.js' | asset_url }}" defer="defer"></script>
+
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'main-collection-context.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --main-collection-page-width: {{ settings.page_width | divided_by: 10.0 }}rem;
+    --main-collection-bg: {{ section.settings.background_color }};
+    --main-collection-accent: {{ section.settings.accent_color }};
+    --main-collection-info-icon: {{ section.settings.info_icon_color }};
+    --main-collection-info-text: {{ section.settings.info_text_color }};
+    --main-collection-columns: {{ section.settings.columns_desktop }};
+    --main-collection-mobile-columns: {{ section.settings.columns_mobile }};
+    --main-collection-gap: {{ section.settings.grid_gap }}px;
+    --main-collection-mobile-gap: {{ section.settings.mobile_grid_gap }}px;
+    --main-collection-grid-top: {{ section.settings.grid_top_spacing }}px;
+    --main-collection-padding-top: {{ section.settings.padding_top }}px;
+    --main-collection-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --main-collection-mobile-padding-top: {{ section.settings.mobile_padding_top }}px;
+    --main-collection-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<collection-component view-event-payload="{{ collection | standard_event_data: 'view' | escape }}" data-collection-id="{{ collection.id }}">
+  <section class="main-collection" data-collection-context data-collection-handle="{{ collection.handle | escape }}" data-collection-title="{{ collection.title | escape }}" data-collection-url="{{ collection.url }}">
+    <div class="main-collection__inner">
+      <nav class="main-collection__breadcrumbs" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{{ collection.title | escape }}</span>
+      </nav>
+
+      <header class="main-collection__header">
+        <{{ section.settings.heading_tag }} class="main-collection__title">{{ collection.title | escape }}</{{ section.settings.heading_tag }}>
+        {%- if collection.description != blank -%}<div class="main-collection__description rte">{{ collection.description }}</div>{%- endif -%}
+        {%- if section.settings.info_text != blank -%}
+          <div class="main-collection__info">
+            {%- if section.settings.info_icon != 'none' -%}<span class="main-collection__info-icon">{% render 'icons', icon: section.settings.info_icon %}</span>{%- endif -%}
+            <span class="main-collection__info-text">{{ section.settings.info_text }}</span>
+          </div>
+        {%- endif -%}
+      </header>
+
+      {%- if section.blocks.size > 0 -%}
+        <nav class="main-collection__pills" aria-label="Collection navigation">
+          <div class="main-collection__pills-track">
+            {%- for block in section.blocks -%}
+              {%- assign linked_collection = block.settings.collection -%}
+              {%- if linked_collection != blank -%}
+                {%- assign pill_title = block.settings.title_override | default: linked_collection.title -%}
+                <a class="main-collection__pill{% if linked_collection.handle == collection.handle %} is-active{% endif %}" href="{{ linked_collection.url }}" {{ block.shopify_attributes }}>{{ pill_title | escape }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </nav>
+      {%- endif -%}
+
+      {%- paginate collection.products by section.settings.products_per_page -%}
+        <div class="main-collection__meta">
+          <p class="main-collection__count" role="status">{{ collection.products_count }}{% if section.settings.product_count_suffix != blank %} {{ section.settings.product_count_suffix | escape }}{% endif %}</p>
+          <form class="main-collection__sort-form" action="{{ collection.url }}" method="get">
+            {%- for filter in collection.filters -%}
+              {%- if filter.type == 'price_range' -%}
+                {%- if filter.min_value.value != blank -%}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}">{%- endif -%}
+                {%- if filter.max_value.value != blank -%}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}">{%- endif -%}
+              {%- else -%}
+                {%- for value in filter.active_values -%}<input type="hidden" name="{{ value.param_name }}" value="{{ value.value | escape }}">{%- endfor -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+            <label class="visually-hidden" for="CollectionSort-{{ section.id }}">{{ 'products.facets.sort_by_label' | t }}</label>
+            <select id="CollectionSort-{{ section.id }}" class="main-collection__sort" name="sort_by" onchange="this.form.submit()">
+              {%- for option in collection.sort_options -%}<option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected="selected"{% endif %}>{{ option.name | escape }}</option>{%- endfor -%}
+            </select>
+          </form>
+        </div>
+
+        {%- if collection.products.size == 0 -%}
+          <div class="main-collection__empty"><p>{{ 'sections.collection_template.empty' | t }}</p></div>
+        {%- else -%}
+          <ul class="main-collection__grid" id="product-grid" data-id="{{ section.id }}" role="list">
+            {%- assign skip_card_product_styles = false -%}
+            {%- for product in collection.products -%}
+              <li class="main-collection__grid-item">
+                {% render 'card-product', card_product: product, media_aspect_ratio: 'square', show_secondary_image: false, show_vendor: false, show_rating: true, lazy_load: true, skip_styles: skip_card_product_styles, quick_add: 'standard', section_id: section.id, product_view_context: 'collection' %}
+              </li>
+              {%- assign skip_card_product_styles = true -%}
+            {%- endfor -%}
+          </ul>
+          {%- if paginate.pages > 1 -%}{% render 'pagination', paginate: paginate, anchor: '#product-grid' %}{%- endif -%}
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  </section>
+</collection-component>
+
+{% schema %}
+{
+  "name": "Main collection",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#E64D95" },
+    { "type": "select", "id": "heading_tag", "label": "Heading tag", "default": "h1", "options": [{ "value": "h1", "label": "H1" }, { "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }, { "value": "h4", "label": "H4" }, { "value": "h5", "label": "H5" }, { "value": "h6", "label": "H6" }] },
+    { "type": "header", "content": "Information row" },
+    { "type": "select", "id": "info_icon", "label": "Icon", "default": "truck", "options": [{ "value": "sparkles", "label": "Sparkles" }, { "value": "star", "label": "Star" }, { "value": "truck", "label": "Truck" }, { "value": "rotate", "label": "Rotate" }, { "value": "arrow-right", "label": "Arrow right" }, { "value": "none", "label": "None" }] },
+    { "type": "inline_richtext", "id": "info_text", "label": "Info text", "default": "₹99 flat shipping, pan-India" },
+    { "type": "color", "id": "info_icon_color", "label": "Icon color", "default": "#E64D95" },
+    { "type": "color", "id": "info_text_color", "label": "Text color", "default": "#5F3A50" },
+    { "type": "header", "content": "Products" },
+    { "type": "text", "id": "product_count_suffix", "label": "Product count suffix", "default": "items" },
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 36, "step": 4, "default": 16 },
+    { "type": "range", "id": "columns_desktop", "label": "Products per row on desktop", "min": 2, "max": 6, "step": 1, "default": 4 },
+    { "type": "select", "id": "columns_mobile", "label": "Products per row on mobile", "default": "2", "options": [{ "value": "1", "label": "1 product" }, { "value": "2", "label": "2 products" }] },
+    { "type": "range", "id": "grid_gap", "label": "Desktop grid gap", "min": 8, "max": 40, "step": 2, "unit": "px", "default": 16 },
+    { "type": "range", "id": "mobile_grid_gap", "label": "Mobile grid gap", "min": 6, "max": 24, "step": 2, "unit": "px", "default": 10 },
+    { "type": "range", "id": "grid_top_spacing", "label": "Grid top spacing", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 16 },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Desktop top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 60 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 40 }
+  ],
+  "blocks": [{ "type": "collection_link", "name": "Collection pill", "settings": [{ "type": "collection", "id": "collection", "label": "Collection" }, { "type": "text", "id": "title_override", "label": "Title override", "info": "Leave blank to use the selected collection title." }] }],
+  "presets": [{ "name": "Main collection", "blocks": [{ "type": "collection_link" }, { "type": "collection_link" }, { "type": "collection_link" }, { "type": "collection_link" }] }]
+}
+{% endschema %}

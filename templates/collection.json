@@ -1,0 +1,107 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "collection_link_QWnpTX": {
+          "type": "collection_link",
+          "settings": {
+            "collection": "best-sellers",
+            "title_override": "All"
+          }
+        },
+        "collection_link_UAJeaJ": {
+          "type": "collection_link",
+          "settings": {
+            "collection": "stationery",
+            "title_override": "Stationery"
+          }
+        },
+        "collection_link_V4GJMV": {
+          "type": "collection_link",
+          "settings": {
+            "collection": "bundle-_-premium_bottle",
+            "title_override": "Bottles"
+          }
+        },
+        "collection_link_hFzUka": {
+          "type": "collection_link",
+          "settings": {
+            "collection": "keychains-charms",
+            "title_override": "Keychains"
+          }
+        },
+        "collection_link_WQUyiB": {
+          "type": "collection_link",
+          "settings": {
+            "collection": "jewellery",
+            "title_override": ""
+          }
+        },
+        "collection_link_8b4xH7": {
+          "type": "collection_link",
+          "settings": {
+            "collection": "bundles",
+            "title_override": "Bundles & Gifts"
+          }
+        },
+        "collection_link_WGGhMh": {
+          "type": "collection_link",
+          "settings": {
+            "collection": "just-in-newly-added-products",
+            "title_override": "New Arrivals"
+          }
+        },
+        "collection_link_344Njm": {
+          "type": "collection_link",
+          "settings": {
+            "collection": "best-sellers",
+            "title_override": "Bestsellers"
+          }
+        }
+      },
+      "block_order": [
+        "collection_link_QWnpTX",
+        "collection_link_UAJeaJ",
+        "collection_link_V4GJMV",
+        "collection_link_hFzUka",
+        "collection_link_WQUyiB",
+        "collection_link_8b4xH7",
+        "collection_link_WGGhMh",
+        "collection_link_344Njm"
+      ],
+      "settings": {
+        "background_color": "#ffffff",
+        "accent_color": "#e64d95",
+        "heading_tag": "h1",
+        "info_icon": "truck",
+        "info_text": "₹99 flat shipping, pan-India",
+        "info_icon_color": "#e64d95",
+        "info_text_color": "#5f3a50",
+        "product_count_suffix": "items",
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "grid_gap": 16,
+        "mobile_grid_gap": 10,
+        "grid_top_spacing": 16,
+        "padding_top": 24,
+        "padding_bottom": 60,
+        "mobile_padding_top": 20,
+        "mobile_padding_bottom": 40
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,184 @@
+.instafeed-section .instafeed {
+  padding-top: var(--instafeed-padding-top);
+  padding-bottom: var(--instafeed-padding-bottom);
+  background: var(--instafeed-background);
+}
+
+.instafeed-section .instafeed__inner {
+  width: min(calc(100% - 4rem), var(--section-page-width));
+  margin: 0 auto;
+}
+
+.instafeed-section .instafeed__header {
+  max-width: 70rem;
+  margin: 0 auto 1.8rem;
+  text-align: center;
+}
+
+.instafeed-section .instafeed__caption {
+  margin: 0 0 0.8rem;
+  color: var(--instafeed-caption-color);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.instafeed-section .instafeed__title {
+  margin: 0;
+  color: var(--instafeed-title-color);
+  font-family: var(--font-heading-family);
+  font-size: var(--instafeed-title-size);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.15;
+}
+
+.instafeed-section .instafeed__description {
+  margin: 1.4rem auto 0;
+  color: var(--instafeed-description-color);
+  font-size: var(--instafeed-description-size);
+  line-height: 1.4;
+}
+
+.instafeed-section .instafeed__description p {
+  margin: 0;
+}
+
+.instafeed-section .instafeed__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.instafeed-section .instafeed__item {
+  min-width: 0;
+}
+
+.instafeed-section .instafeed__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 2rem;
+  background: rgba(230, 77, 149, 0.08);
+  transform: translateZ(0);
+}
+
+.instafeed-section .instafeed__image,
+.instafeed-section .instafeed__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.instafeed-section .instafeed__placeholder {
+  padding: 1rem;
+  color: rgba(230, 77, 149, 0.35);
+  background: rgba(230, 77, 149, 0.08);
+}
+
+.instafeed-section .instafeed__media:focus-visible {
+  outline: 2px solid #e64d95;
+  outline-offset: 3px;
+}
+
+.instafeed-section .instafeed__button-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6rem;
+}
+
+.instafeed-section .instafeed__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 4.2rem;
+  padding: 0.9rem 2.2rem;
+  border: 1px solid rgba(230, 77, 149, 0.3);
+  border-radius: 999px;
+  color: var(--button-color);
+  background: var(--button-background);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: color 200ms ease, background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+
+.instafeed-section .instafeed__button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(42, 15, 28, 0.1);
+  filter: brightness(0.97);
+}
+
+.instafeed-section .instafeed__button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.instafeed-section .instafeed__button-icon,
+.instafeed-section .instafeed__button-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.instafeed-section .instafeed__button-icon {
+  display: inline-flex;
+  transition: transform 200ms ease;
+}
+
+.instafeed-section .instafeed__button:hover .instafeed__button-icon {
+  transform: translateX(2px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .instafeed-section .instafeed__media:hover .instafeed__image,
+  .instafeed-section .instafeed__media:hover .instafeed__placeholder {
+    transform: scale(1.05);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .instafeed-section .instafeed {
+    padding-top: var(--instafeed-mobile-padding-top);
+    padding-bottom: var(--instafeed-mobile-padding-bottom);
+  }
+
+  .instafeed-section .instafeed__inner {
+    width: min(calc(100% - 3.2rem), var(--section-page-width));
+  }
+
+  .instafeed-section .instafeed__header {
+    margin-bottom: 1.6rem;
+  }
+
+  .instafeed-section .instafeed__title {
+    font-size: clamp(2.2rem, 8vw, var(--instafeed-title-size));
+  }
+
+  .instafeed-section .instafeed__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+
+  .instafeed-section .instafeed__media {
+    border-radius: 1.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .instafeed-section .instafeed__image,
+  .instafeed-section .instafeed__placeholder,
+  .instafeed-section .instafeed__button,
+  .instafeed-section .instafeed__button-icon {
+    transition: none;
+  }
+}

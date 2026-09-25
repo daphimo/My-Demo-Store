@@ -1,0 +1,76 @@
+{{ 'custom-footer.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --footer-page-width: {{ settings.page_width | divided_by: 10.0 }}rem;
+    --footer-utilities-bg: {{ section.settings.background_color }};
+    --footer-utilities-color: {{ section.settings.text_color }};
+    --footer-utilities-icon: {{ section.settings.icon_color }};
+    --footer-utilities-border: {{ section.settings.border_color }};
+    --footer-utilities-padding-top: {{ section.settings.padding_top }}px;
+    --footer-utilities-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --footer-utilities-mobile-padding-top: {{ section.settings.mobile_padding_top }}px;
+    --footer-utilities-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section class="footer-utilities">
+  <div class="footer-utilities__inner">
+    {%- if section.blocks.size > 0 -%}
+      <div class="footer-utilities__items" role="list">
+        {%- for block in section.blocks -%}
+          <div class="footer-utilities__item" role="listitem" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != 'none' -%}<span class="footer-utilities__icon">{% render 'icons', icon: block.settings.icon %}</span>{%- endif -%}
+            <span class="footer-utilities__text">{{ block.settings.text }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+    <p class="footer-utilities__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}.{% if section.settings.follow_up_line != blank %} {{ section.settings.follow_up_line | escape }}{% endif %}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Footer utilities",
+  "tag": "section",
+  "class": "section-footer-utilities",
+  "settings": [
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFF0F7" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#5F3A50" },
+    { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#E64D95" },
+    { "type": "color", "id": "border_color", "label": "Top border color", "default": "#F7D5E5" },
+    { "type": "text", "id": "follow_up_line", "label": "Follow-up line", "default": "Romanticize your everyday." },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Desktop top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 20 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 20 }
+  ],
+  "blocks": [{
+    "type": "utility", "name": "Utility",
+    "settings": [
+      {
+        "type": "select", "id": "icon", "label": "Icon",
+        "options": [
+          { "value": "sparkles", "label": "Sparkles" }, { "value": "star", "label": "Star" },
+          { "value": "truck", "label": "Truck" }, { "value": "rotate", "label": "Rotate" },
+          { "value": "arrow-right", "label": "Arrow right" }, { "value": "none", "label": "None" }
+        ],
+        "default": "sparkles"
+      },
+      { "type": "inline_richtext", "id": "text", "label": "Text", "default": "Secure payments" }
+    ]
+  }],
+  "presets": [{
+    "name": "Footer utilities",
+    "blocks": [
+      { "type": "utility", "settings": { "icon": "star", "text": "Secure payments" } },
+      { "type": "utility", "settings": { "icon": "truck", "text": "₹99 flat shipping, pan-India" } },
+      { "type": "utility", "settings": { "icon": "sparkles", "text": "5% off on prepaid orders" } },
+      { "type": "utility", "settings": { "icon": "star", "text": "Made for gifting" } }
+    ]
+  }]
+}
+{% endschema %}

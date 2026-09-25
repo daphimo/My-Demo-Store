@@ -1,0 +1,234 @@
+{%- liquid
+  assign desktop_image = section.settings.desktop_image
+  if desktop_image == blank
+    assign desktop_image = section.settings.mobile_image
+  endif
+
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+{{ 'section-hero-custom.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="hero hero--align-{{ section.settings.content_alignment }}"
+  aria-label="{{ section.settings.accessibility_label | escape }}"
+  style="--section-page-width: {{ settings.page_width | divided_by: 10.0 }}rem; --hero-desktop-height: {{ section.settings.desktop_height }}px; --hero-mobile-height: {{ section.settings.mobile_height }}px; --hero-overlay-color: {{ section.settings.overlay_color }}; --hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}; --hero-desktop-position: {{ section.settings.desktop_image_position }}; --hero-mobile-position: {{ section.settings.mobile_image_position }};"
+>
+  <div class="hero__media" aria-hidden="true">
+    {%- if desktop_image != blank -%}
+      <picture>
+        {%- if section.settings.mobile_image != blank -%}
+          <source
+            media="(max-width: 749px)"
+            srcset="
+              {{ section.settings.mobile_image | image_url: width: 375 }} 375w,
+              {{ section.settings.mobile_image | image_url: width: 550 }} 550w,
+              {{ section.settings.mobile_image | image_url: width: 750 }} 750w,
+              {{ section.settings.mobile_image | image_url: width: 1100 }} 1100w
+            "
+            sizes="100vw"
+          >
+        {%- endif -%}
+        {{ desktop_image | image_url: width: 2400 | image_tag: widths: '750, 1100, 1500, 1780, 2000, 2400', sizes: '100vw', loading: 'eager', fetchpriority: fetch_priority, alt: '' }}
+      </picture>
+    {%- else -%}
+      <div class="hero__placeholder">{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+    {%- endif -%}
+  </div>
+  <div class="hero__overlay"></div>
+
+  <div class="hero__inner">
+    <div class="hero__content">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'eyebrow' -%}
+            {%- if block.settings.text != blank -%}
+              <div
+                class="hero__eyebrow"
+                style="--eyebrow-background: {{ block.settings.background }}; --eyebrow-color: {{ block.settings.text_color }}; --eyebrow-icon-color: {{ block.settings.icon_color }}; --eyebrow-radius: {{ block.settings.border_radius }}px;"
+                {{ block.shopify_attributes }}
+              >
+                {%- if block.settings.icon != 'none' -%}<span class="hero__eyebrow-icon">{% render 'icons', icon: block.settings.icon %}</span>{%- endif -%}
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {%- endif -%}
+
+          {%- when 'heading' -%}
+            {%- if block.settings.heading != blank -%}
+              <{{ block.settings.heading_tag }} class="hero__heading" style="--hero-heading-size: {{ block.settings.heading_size }}px; --hero-heading-color: {{ block.settings.heading_color }};" {{ block.shopify_attributes }}>
+                {{ block.settings.heading }}
+              </{{ block.settings.heading_tag }}>
+            {%- endif -%}
+
+          {%- when 'content' -%}
+            {%- if block.settings.content != blank -%}
+              <div class="hero__description" style="--hero-content-size: {{ block.settings.font_size }}px; --hero-content-color: {{ block.settings.text_color }};" {{ block.shopify_attributes }}>
+                {{ block.settings.content }}
+              </div>
+            {%- endif -%}
+
+          {%- when 'buttons' -%}
+            {%- if block.settings.button_1_text != blank or block.settings.button_2_text != blank -%}
+              <div class="hero__buttons" {{ block.shopify_attributes }}>
+                {%- if block.settings.button_1_text != blank -%}
+                  {% render 'button',
+                    text: block.settings.button_1_text,
+                    link: block.settings.button_1_link,
+                    background: block.settings.button_1_background,
+                    text_color: block.settings.button_1_color,
+                    show_arrow: block.settings.button_1_arrow,
+                    open_in_new_tab: block.settings.button_1_new_tab,
+                    class: 'hero__button',
+                    icon_class: 'hero__button-icon'
+                  %}
+                {%- endif -%}
+                {%- if block.settings.button_2_text != blank -%}
+                  {% render 'button',
+                    text: block.settings.button_2_text,
+                    link: block.settings.button_2_link,
+                    background: block.settings.button_2_background,
+                    text_color: block.settings.button_2_color,
+                    show_arrow: block.settings.button_2_arrow,
+                    open_in_new_tab: block.settings.button_2_new_tab,
+                    class: 'hero__button',
+                    icon_class: 'hero__button-icon'
+                  %}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+          {%- when 'feature' -%}
+            {%- liquid
+              assign previous_is_feature = false
+              assign next_is_feature = false
+              unless forloop.first
+                assign previous_index = forloop.index0 | minus: 1
+                assign previous_block = section.blocks[previous_index]
+                if previous_block.type == 'feature'
+                  assign previous_is_feature = true
+                endif
+              endunless
+              unless forloop.last
+                assign next_block = section.blocks[forloop.index]
+                if next_block.type == 'feature'
+                  assign next_is_feature = true
+                endif
+              endunless
+            -%}
+            {%- unless previous_is_feature -%}<div class="hero__features">{%- endunless -%}
+            {%- if block.settings.text != blank -%}
+              <div class="hero__feature" style="--feature-color: {{ block.settings.text_color }}; --feature-icon-color: {{ block.settings.icon_color }};" {{ block.shopify_attributes }}>
+                <span class="hero__feature-icon">{% render 'icons', icon: block.settings.icon %}</span>
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {%- endif -%}
+            {%- unless next_is_feature -%}</div>{%- endunless -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "hero-section section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "accessibility_label", "label": "Accessibility label", "default": "Featured promotion" },
+    { "type": "range", "id": "desktop_height", "label": "Desktop hero height", "min": 300, "max": 900, "step": 10, "unit": "px", "default": 500 },
+    { "type": "range", "id": "mobile_height", "label": "Mobile hero height", "min": 400, "max": 1000, "step": 10, "unit": "px", "default": 650 },
+    { "type": "image_picker", "id": "desktop_image", "label": "Desktop background image" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile background image" },
+    {
+      "type": "select", "id": "desktop_image_position", "label": "Desktop image position", "default": "center",
+      "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" }]
+    },
+    {
+      "type": "select", "id": "mobile_image_position", "label": "Mobile image position", "default": "center",
+      "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" }]
+    },
+    { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#FFFFFF" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 65 },
+    {
+      "type": "select", "id": "content_alignment", "label": "Content alignment", "default": "left",
+      "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" }]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow", "name": "Eyebrow / icon text", "limit": 2,
+      "settings": [
+        { "type": "inline_richtext", "id": "text", "label": "Text" },
+        { "type": "select", "id": "icon", "label": "Icon", "default": "sparkles", "options": [{ "value": "sparkles", "label": "Sparkles" }, { "value": "star", "label": "Star" }, { "value": "truck", "label": "Truck" }, { "value": "rotate", "label": "Rotate" }, { "value": "none", "label": "None" }] },
+        { "type": "color", "id": "background", "label": "Background", "default": "#FFFFFF" },
+        { "type": "color", "id": "text_color", "label": "Text color", "default": "#1A1020" },
+        { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#E64D95" },
+        { "type": "range", "id": "border_radius", "label": "Border radius", "min": 0, "max": 40, "step": 1, "unit": "px", "default": 24 }
+      ]
+    },
+    {
+      "type": "heading", "name": "Heading", "limit": 2,
+      "settings": [
+        { "type": "inline_richtext", "id": "heading", "label": "Heading" },
+        { "type": "select", "id": "heading_tag", "label": "Heading tag", "default": "h1", "options": [{ "value": "h1", "label": "H1" }, { "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }, { "value": "h4", "label": "H4" }] },
+        { "type": "range", "id": "heading_size", "label": "Heading size", "min": 24, "max": 90, "step": 1, "unit": "px", "default": 48 },
+        { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#241226" }
+      ]
+    },
+    {
+      "type": "content", "name": "Content", "limit": 3,
+      "settings": [
+        { "type": "inline_richtext", "id": "content", "label": "Content" },
+        { "type": "range", "id": "font_size", "label": "Font size", "min": 12, "max": 30, "step": 1, "unit": "px", "default": 16 },
+        { "type": "color", "id": "text_color", "label": "Text color", "default": "#4A3345" }
+      ]
+    },
+    {
+      "type": "buttons", "name": "Buttons", "limit": 2,
+      "settings": [
+        { "type": "text", "id": "button_1_text", "label": "Button 1 text" },
+        { "type": "url", "id": "button_1_link", "label": "Button 1 link" },
+        { "type": "color", "id": "button_1_background", "label": "Button 1 background", "default": "#E64D95" },
+        { "type": "color", "id": "button_1_color", "label": "Button 1 text color", "default": "#FFFFFF" },
+        { "type": "checkbox", "id": "button_1_arrow", "label": "Show arrow on button 1", "default": true },
+        { "type": "checkbox", "id": "button_1_new_tab", "label": "Open button 1 in a new tab", "default": false },
+        { "type": "text", "id": "button_2_text", "label": "Button 2 text" },
+        { "type": "url", "id": "button_2_link", "label": "Button 2 link" },
+        { "type": "color", "id": "button_2_background", "label": "Button 2 background", "default": "#FFFFFF" },
+        { "type": "color", "id": "button_2_color", "label": "Button 2 text color", "default": "#241226" },
+        { "type": "checkbox", "id": "button_2_arrow", "label": "Show arrow on button 2", "default": false },
+        { "type": "checkbox", "id": "button_2_new_tab", "label": "Open button 2 in a new tab", "default": false }
+      ]
+    },
+    {
+      "type": "feature", "name": "Feature / highlight",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "star", "options": [{ "value": "star", "label": "Star" }, { "value": "truck", "label": "Truck" }, { "value": "sparkles", "label": "Sparkles" }, { "value": "rotate", "label": "Rotate" }] },
+        { "type": "inline_richtext", "id": "text", "label": "Text" },
+        { "type": "color", "id": "text_color", "label": "Text color", "default": "#4A3345" },
+        { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#E64D95" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero",
+      "blocks": [
+        { "type": "eyebrow", "settings": { "text": "FOR THE EVERYDAY ROMANTIC", "icon": "sparkles" } },
+        { "type": "heading", "settings": { "heading": "Romanticize your everyday. ✨", "heading_tag": "h1", "heading_size": 48 } },
+        { "type": "content", "settings": { "content": "Cute, aesthetic little things — stationery, bottles, keychains and accessories — that make your ordinary routine feel a lot more special.", "font_size": 16 } },
+        { "type": "buttons", "settings": { "button_1_text": "Shop the joy", "button_1_link": "shopify://collections/all", "button_1_arrow": true, "button_2_text": "Explore new arrivals", "button_2_link": "shopify://collections/all", "button_2_arrow": false } },
+        { "type": "feature", "settings": { "icon": "star", "text": "2000+ happy orders" } },
+        { "type": "feature", "settings": { "icon": "truck", "text": "₹99 flat shipping, pan-India" } },
+        { "type": "feature", "settings": { "icon": "sparkles", "text": "5% off on prepaid orders" } },
+        { "type": "feature", "settings": { "icon": "rotate", "text": "Dispatched fast" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

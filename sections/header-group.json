@@ -1,0 +1,100 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "marquee_FLPtJR": {
+      "type": "marquee",
+      "blocks": {
+        "text_nEjjMi": {
+          "type": "text",
+          "settings": {
+            "text": "DELIVERED IN 24–48 HOURS",
+            "link": ""
+          }
+        },
+        "text_pexTwQ": {
+          "type": "text",
+          "settings": {
+            "text": "PARTIAL COD AVAILABLE",
+            "link": ""
+          }
+        },
+        "text_mjVAna": {
+          "type": "text",
+          "settings": {
+            "text": "FREE KEYCHAIN ON ORDERS ABOVE ₹999/-",
+            "link": ""
+          }
+        },
+        "text_6XqC3B": {
+          "type": "text",
+          "settings": {
+            "text": "ADDITIONAL 5% OFF ON ALL PREPAID ORDERS",
+            "link": ""
+          }
+        },
+        "text_HUWbMU": {
+          "type": "text",
+          "settings": {
+            "text": "₹99 FLAT SHIPPING CHARGES ON ALL ORDERS",
+            "link": ""
+          }
+        },
+        "text_mmGtzi": {
+          "type": "text",
+          "settings": {
+            "text": "DISPATCHED IN 24–48 HOURS",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_nEjjMi",
+        "text_pexTwQ",
+        "text_mjVAna",
+        "text_6XqC3B",
+        "text_HUWbMU",
+        "text_mmGtzi"
+      ],
+      "name": "Marquee",
+      "settings": {
+        "background_color": "#e74695",
+        "text_color": "#ffffff",
+        "text_size": 10,
+        "animation_speed": 200,
+        "pause_on_hover": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "show_search": false,
+        "show_account": false,
+        "show_language": false,
+        "show_currency": false,
+        "open_first_mobile_item": false,
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "color_scheme": "scheme-149ae49e-ad9f-4caa-aea4-455fa2be427c",
+        "menu_color_scheme": "scheme-149ae49e-ad9f-4caa-aea4-455fa2be427c",
+        "margin_bottom": 0,
+        "padding_top": 8,
+        "padding_bottom": 8
+      }
+    }
+  },
+  "order": [
+    "marquee_FLPtJR",
+    "header"
+  ]
+}

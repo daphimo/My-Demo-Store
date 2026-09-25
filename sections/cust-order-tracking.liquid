@@ -1,0 +1,80 @@
+{{ 'cust-order-tracking.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cust-order-tracking.js' | asset_url }}" defer="defer"></script>
+
+<section
+  id="CustOrderTracking-{{ section.id }}"
+  class="cust-order-tracking cust-order-tracking--{{ section.settings.alignment }}"
+  style="--cust-tracking-width:{{ section.settings.section_width }}px;--cust-tracking-pt:{{ section.settings.padding_top }}px;--cust-tracking-pb:{{ section.settings.padding_bottom }}px;--cust-tracking-mpt:{{ section.settings.mobile_padding_top }}px;--cust-tracking-mpb:{{ section.settings.mobile_padding_bottom }}px;"
+  data-cust-order-tracking
+  data-endpoint="{{ section.settings.proxy_endpoint | escape }}"
+  data-loading-message="{{ section.settings.loading_message | escape }}"
+  data-error-message="{{ section.settings.error_message | escape }}"
+  data-not-found-message="{{ section.settings.not_found_message | escape }}"
+  data-unshipped-message="{{ section.settings.unshipped_message | escape }}"
+  data-no-tracking-message="{{ section.settings.no_tracking_message | escape }}"
+  data-unknown-carrier-message="{{ section.settings.unknown_carrier_message | escape }}"
+  data-show-timeline="{{ section.settings.show_timeline }}"
+>
+  <div class="cust-order-tracking__container">
+    <header class="cust-order-tracking__header">
+      {% if section.settings.eyebrow != blank %}<p class="cust-order-tracking__eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      {% if section.settings.title != blank %}<h1 class="cust-order-tracking__title">{{ section.settings.title | escape }}</h1>{% endif %}
+      {% if section.settings.description != blank %}<p class="cust-order-tracking__description">{{ section.settings.description | escape | newline_to_br }}</p>{% endif %}
+    </header>
+
+    <form class="cust-order-tracking__form" data-cust-tracking-form novalidate>
+      <div class="cust-order-tracking__field">
+        <label class="cust-order-tracking__label" for="CustTrackingOrder-{{ section.id }}">{{ section.settings.order_label | escape }}</label>
+        <input class="cust-order-tracking__input" id="CustTrackingOrder-{{ section.id }}" name="orderNumber" type="text" autocomplete="off" maxlength="64" placeholder="{{ section.settings.order_placeholder | escape }}" aria-describedby="CustTrackingMessage-{{ section.id }}" required data-cust-tracking-order>
+      </div>
+      <div class="cust-order-tracking__field">
+        <label class="cust-order-tracking__label" for="CustTrackingContact-{{ section.id }}">{{ section.settings.contact_label | escape }}</label>
+        <input class="cust-order-tracking__input" id="CustTrackingContact-{{ section.id }}" name="contact" type="text" autocomplete="email" maxlength="254" placeholder="{{ section.settings.contact_placeholder | escape }}" aria-describedby="CustTrackingMessage-{{ section.id }}" required data-cust-tracking-contact>
+      </div>
+      <button class="cust-order-tracking__button" type="submit" data-cust-tracking-submit>
+        <span data-cust-submit-label>{{ section.settings.button_text | escape }}</span>
+        <span class="cust-order-tracking__spinner" aria-hidden="true"></span>
+      </button>
+    </form>
+
+    <div class="cust-order-tracking__message" id="CustTrackingMessage-{{ section.id }}" role="alert" aria-live="assertive" data-cust-tracking-message hidden></div>
+    <div class="cust-order-tracking__results" aria-live="polite" aria-atomic="false" data-cust-tracking-results hidden></div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Order tracking",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "TRACK YOUR ORDER" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Track Your Order" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Enter your order number and the email address or phone number used at checkout." },
+    { "type": "text", "id": "order_label", "label": "Order number label", "default": "Order Number" },
+    { "type": "text", "id": "order_placeholder", "label": "Order number placeholder", "default": "For example, #1052" },
+    { "type": "text", "id": "contact_label", "label": "Contact label", "default": "Email / Phone" },
+    { "type": "text", "id": "contact_placeholder", "label": "Contact placeholder", "default": "Enter the email or phone used at checkout" },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Track Order" },
+    { "type": "header", "content": "Messages" },
+    { "type": "text", "id": "loading_message", "label": "Loading message", "default": "Fetching your tracking information..." },
+    { "type": "textarea", "id": "not_found_message", "label": "Order not found message", "default": "We couldn't find an order with those details. Please check your order number and contact information." },
+    { "type": "textarea", "id": "unshipped_message", "label": "Not shipped message", "default": "Your order has been confirmed but hasn't been shipped yet. Tracking information will appear once your shipment is dispatched." },
+    { "type": "text", "id": "no_tracking_message", "label": "No tracking number message", "default": "Tracking information is not available yet." },
+    { "type": "text", "id": "unknown_carrier_message", "label": "Unknown carrier message", "default": "Tracking information is currently unavailable." },
+    { "type": "textarea", "id": "error_message", "label": "Service error message", "default": "We couldn't retrieve your tracking information right now. Please try again later." },
+    { "type": "header", "content": "Display" },
+    { "type": "checkbox", "id": "show_timeline", "label": "Show tracking timeline", "default": true },
+    { "type": "text", "id": "proxy_endpoint", "label": "Secure proxy endpoint", "info": "Same-origin Shopify app proxy path. Never enter an API token here.", "default": "/apps/order-tracking" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "section_width", "label": "Section width", "min": 600, "max": 1200, "step": 20, "unit": "px", "default": 900 },
+    { "type": "select", "id": "alignment", "label": "Content alignment", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"}], "default": "center" },
+    { "type": "range", "id": "padding_top", "label": "Desktop top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 56 }
+  ],
+  "presets": [{ "name": "Order tracking" }]
+}
+{% endschema %}

@@ -1,0 +1,207 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "about-us-hero",
+      "settings": {
+        "eyebrow": "ABOUT US",
+        "heading": "Romanticize Your Everyday",
+        "description": "Cute everyday essentials — why be boring when you can be cute?",
+        "desktop_height": 280,
+        "mobile_height": 220,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "mobile_padding_top": 28,
+        "mobile_padding_bottom": 28
+      }
+    },
+    "intro": {
+      "type": "about-us-intro",
+      "blocks": {
+        "category_1": {
+          "type": "category",
+          "settings": {
+            "label": "Stationery",
+            "link": ""
+          }
+        },
+        "category_2": {
+          "type": "category",
+          "settings": {
+            "label": "Sipper bottles",
+            "link": ""
+          }
+        },
+        "category_3": {
+          "type": "category",
+          "settings": {
+            "label": "Keychains & charms",
+            "link": ""
+          }
+        },
+        "category_4": {
+          "type": "category",
+          "settings": {
+            "label": "Bags & pouches",
+            "link": ""
+          }
+        },
+        "category_5": {
+          "type": "category",
+          "settings": {
+            "label": "Gifts & hampers",
+            "link": ""
+          }
+        },
+        "category_6": {
+          "type": "category",
+          "settings": {
+            "label": "The Cute Edit",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "category_2",
+        "category_3",
+        "category_4",
+        "category_5",
+        "category_6"
+      ],
+      "settings": {
+        "eyebrow": "WHO WE ARE",
+        "heading": "India’s Cute Essentials Store",
+        "image": "shopify://shop_images/lifestyle-CU2FVmzE.png",
+        "content_heading": "Who we are",
+        "content": "<p>Two sisters and mothers who couldn’t find trusted, affordable, on-trend cute stationery in India — so we built the store we wished existed.</p>",
+        "highlight": "Cute everyday essentials — why be boring when you can be cute?",
+        "supporting_text": "If you carry it every day, it might as well make you smile.",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "mobile_padding_top": 28,
+        "mobile_padding_bottom": 28
+      }
+    },
+    "features": {
+      "type": "about-us-features",
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "heading": "Curated by founders",
+            "description": "Every piece picked for quality, cuteness and daily use."
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "heading": "Affordable",
+            "description": "Gifts from ₹299, flat ₹99 shipping, partial COD."
+          }
+        },
+        "feature_3": {
+          "type": "feature",
+          "settings": {
+            "heading": "Trend-first",
+            "description": "Stitch, Sanrio, Labubu and more — before local shops."
+          }
+        }
+      },
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "feature_3"
+      ],
+      "settings": {
+        "heading": "Why CocoPoco",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "mobile_padding_top": 28,
+        "mobile_padding_bottom": 28
+      }
+    },
+    "mission": {
+      "type": "about-us-mission",
+      "settings": {
+        "image": "shopify://shop_images/gifting-CVgp4Sao.png",
+        "image_position": "left",
+        "eyebrow": "",
+        "heading": "Our mission",
+        "description": "<p>Life doesn’t need a special occasion to feel special.</p>",
+        "quote": "“Romanticize your Everyday”",
+        "button_label": "Shop the Joy",
+        "button_link": "",
+        "button_background": "#e64d95",
+        "button_text_color": "#ffffff",
+        "show_arrow": true,
+        "open_in_new_tab": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "mobile_padding_top": 28,
+        "mobile_padding_bottom": 28
+      }
+    },
+    "faq": {
+      "type": "about-us-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "What is CocoPoco?",
+            "answer": "<p>An Indian e-commerce brand selling cute everyday essentials — kawaii stationery, sipper bottles, keychains, pouches and gift hampers — at cocopoco.in.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Where is CocoPoco based?",
+            "answer": "<p>Kolkata, West Bengal, India. We ship to every state in India.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Who founded CocoPoco?",
+            "answer": "<p>Sisters Smita Bara and Sweta Kindo, in 2024.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "What does “Romanticize your everyday” mean?",
+            "answer": "<p>Finding small joys in ordinary routines through cute, thoughtful things you use every day.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4"
+      ],
+      "settings": {
+        "heading": "FAQs",
+        "padding_top": 48,
+        "padding_bottom": 96,
+        "mobile_padding_top": 28,
+        "mobile_padding_bottom": 56
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "intro",
+    "features",
+    "mission",
+    "faq"
+  ]
+}

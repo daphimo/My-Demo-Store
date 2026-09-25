@@ -1,0 +1,41 @@
+{{ 'about-us.css' | asset_url | stylesheet_tag }}
+<section class="about-us about-us-mission" style="--about-pt: {{ section.settings.padding_top }}px; --about-pb: {{ section.settings.padding_bottom }}px; --about-mpt: {{ section.settings.mobile_padding_top }}px; --about-mpb: {{ section.settings.mobile_padding_bottom }}px;">
+  <div class="about-us__container">
+    <div class="about-us-mission__card about-us-mission__card--{{ section.settings.image_position }}">
+      <div class="about-us-mission__media">
+        {% if section.settings.image != blank %}{{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200, 1400', sizes: '(min-width: 750px) 32rem, calc(100vw - 32px)', class: 'about-us-mission__image' }}{% else %}{{ 'image' | placeholder_svg_tag: 'about-us__placeholder' }}{% endif %}
+      </div>
+      <div class="about-us-mission__content">
+        {% if section.settings.eyebrow != blank %}<p class="about-us__eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+        <h2>{{ section.settings.heading }}</h2>
+        <div class="rte">{{ section.settings.description }}</div>
+        {% if section.settings.quote != blank %}<p class="about-us-mission__quote">{{ section.settings.quote }}</p>{% endif %}
+        {% render 'button', text: section.settings.button_label, link: section.settings.button_link, background: section.settings.button_background, text_color: section.settings.button_text_color, show_arrow: section.settings.show_arrow, open_in_new_tab: section.settings.open_in_new_tab, class: 'about-us-mission__button', icon_class: 'about-us-mission__button-icon' %}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "About mission",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Mission image" },
+    { "type": "select", "id": "image_position", "label": "Image position", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"}], "default": "left" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Our mission" },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Life doesn’t need a special occasion to feel special.</p>" },
+    { "type": "inline_richtext", "id": "quote", "label": "Quote", "default": "“Romanticize your Everyday”" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the Joy" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "color", "id": "button_background", "label": "Button background", "default": "#E64D95" },
+    { "type": "color", "id": "button_text_color", "label": "Button text", "default": "#FFFFFF" },
+    { "type": "checkbox", "id": "show_arrow", "label": "Show arrow", "default": true },
+    { "type": "checkbox", "id": "open_in_new_tab", "label": "Open in new tab", "default": false },
+    { "type": "range", "id": "padding_top", "label": "Desktop top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 28 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 28 }
+  ],
+  "presets": [{ "name": "About mission" }]
+}
+{% endschema %}

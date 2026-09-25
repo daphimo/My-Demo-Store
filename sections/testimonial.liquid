@@ -1,0 +1,95 @@
+{{ 'section-testimonial.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="testimonials"
+  style="--section-page-width: {{ settings.page_width | divided_by: 10.0 }}rem; --testimonial-background: {{ section.settings.background_color }}; --testimonial-caption-color: {{ section.settings.caption_color }}; --testimonial-title-color: {{ section.settings.title_color }}; --testimonial-title-size: {{ section.settings.title_size }}px; --testimonial-card-background: {{ section.settings.card_background }}; --testimonial-text-color: {{ section.settings.text_color }}; --testimonial-meta-color: {{ section.settings.meta_color }}; --testimonial-star-color: {{ section.settings.star_color }}; --testimonial-text-size: {{ section.settings.text_size }}px; --testimonial-padding-top: {{ section.settings.padding_top }}px; --testimonial-padding-bottom: {{ section.settings.padding_bottom }}px; --testimonial-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --testimonial-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px;"
+>
+  <div class="testimonials__inner">
+    {%- if section.settings.caption != blank or section.settings.title != blank -%}
+      <div class="testimonials__header">
+        {%- if section.settings.caption != blank -%}<p class="testimonials__caption">{{ section.settings.caption | escape }}</p>{%- endif -%}
+        {%- if section.settings.title != blank -%}<h2 class="testimonials__title">{{ section.settings.title }}</h2>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="testimonials__viewport" role="region" aria-label="Customer testimonials" tabindex="0">
+      <ul class="testimonials__track" role="list">
+        {%- for block in section.blocks -%}
+          <li class="testimonials__slide" {{ block.shopify_attributes }}>
+            <article class="testimonial-card">
+              {%- if block.settings.rating > 0 -%}
+                <div class="testimonial-card__stars" role="img" aria-label="{{ block.settings.rating }} out of 5 stars">
+                  {%- for star in (1..5) -%}<span aria-hidden="true">{% if star <= block.settings.rating %}★{% else %}☆{% endif %}</span>{%- endfor -%}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.quote != blank -%}
+                <blockquote class="testimonial-card__quote">{{ block.settings.quote }}</blockquote>
+              {%- endif -%}
+
+              {%- if block.settings.name != blank or block.settings.location != blank or block.settings.badge != blank -%}
+                <div class="testimonial-card__customer">
+                  {%- if block.settings.name != blank -%}<span>{{ block.settings.name | escape }}</span>{%- endif -%}
+                  {%- if block.settings.location != blank -%}<span class="testimonial-card__separator">{{ block.settings.location | escape }}</span>{%- endif -%}
+                  {%- if block.settings.badge != blank -%}<span class="testimonial-card__separator">{{ block.settings.badge | escape }}</span>{%- endif -%}
+                </div>
+              {%- endif -%}
+            </article>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "testimonial-section section",
+  "max_blocks": 20,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "caption", "label": "Caption", "default": "CUSTOMER LOVE" },
+    { "type": "color", "id": "caption_color", "label": "Caption color", "default": "#7A5368" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Tiny things. Very big smiles. 💌" },
+    { "type": "range", "id": "title_size", "label": "Title size", "min": 20, "max": 64, "step": 1, "unit": "px", "default": 32 },
+    { "type": "color", "id": "title_color", "label": "Title color", "default": "#2A0F1C" },
+    { "type": "color", "id": "background_color", "label": "Section background", "default": "#FFFFFF" },
+    { "type": "color", "id": "card_background", "label": "Card background", "default": "#FFFFFF" },
+    { "type": "color", "id": "star_color", "label": "Star color", "default": "#E64D95" },
+    { "type": "color", "id": "text_color", "label": "Testimonial color", "default": "#2A0F1C" },
+    { "type": "color", "id": "meta_color", "label": "Customer details color", "default": "#7A5368" },
+    { "type": "range", "id": "text_size", "label": "Testimonial size", "min": 12, "max": 24, "step": 1, "unit": "px", "default": 13 },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "richtext", "id": "quote", "label": "Testimonial", "default": "<p>Everything is so cute and the quality is amazing.</p>" },
+        { "type": "text", "id": "name", "label": "Customer name", "default": "Customer name" },
+        { "type": "text", "id": "location", "label": "Location", "default": "City" },
+        { "type": "text", "id": "badge", "label": "Customer badge", "default": "Verified buyer" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial", "settings": { "quote": "<p>“I bought one for myself and immediately ordered another as a gift!”</p>", "name": "Aditi R.", "location": "Pune" } },
+        { "type": "testimonial", "settings": { "quote": "<p>“Everything is SO cute and the quality is actually amazing.”</p>", "name": "Meher K.", "location": "Delhi" } },
+        { "type": "testimonial", "settings": { "quote": "<p>“The perfect little pick-me-up. My desk finally has a personality.”</p>", "name": "Sanya P.", "location": "Bengaluru" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

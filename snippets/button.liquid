@@ -1,0 +1,29 @@
+{% comment %}
+  Renders a configurable link styled as a button.
+
+  Accepts:
+  - text: Button label
+  - link: Button URL
+  - background: Background color
+  - text_color: Text and icon color
+  - show_arrow: Whether to render the arrow icon
+  - open_in_new_tab: Whether the link opens in a new browser tab
+  - class: Component-specific CSS class
+  - icon_class: Component-specific arrow wrapper class
+  - attributes: Optional Shopify block attributes
+{% endcomment %}
+
+{%- if text != blank -%}
+  <a
+    class="{{ class | escape }}"
+    style="--button-background: {{ background }}; --button-color: {{ text_color }}; --button-text: {{ text_color }};"
+    {% if link != blank %}href="{{ link }}"{% else %}role="link" aria-disabled="true"{% endif %}
+    {% if link != blank and open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+    {{ attributes }}
+  >
+    <span>{{ text | escape }}</span>
+    {%- if show_arrow -%}
+      <span class="{{ icon_class | escape }}">{% render 'icons', icon: 'arrow-right' %}</span>
+    {%- endif -%}
+  </a>
+{%- endif -%}

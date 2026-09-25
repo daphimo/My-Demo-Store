@@ -1,0 +1,107 @@
+{{ 'section-pill-links.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign pill_alignment = 'center'
+  if section.settings.alignment == 'left'
+    assign pill_alignment = 'flex-start'
+  elsif section.settings.alignment == 'right'
+    assign pill_alignment = 'flex-end'
+  endif
+-%}
+
+<section
+  class="pill-links"
+  style="--section-page-width: {{ settings.page_width | divided_by: 10.0 }}rem; --pill-section-background: {{ section.settings.background_color }}; --pill-caption-color: {{ section.settings.caption_color }}; --pill-title-color: {{ section.settings.title_color }}; --pill-title-size: {{ section.settings.title_size }}px; --pill-alignment: {{ pill_alignment }}; --pill-padding-top: {{ section.settings.padding_top }}px; --pill-padding-bottom: {{ section.settings.padding_bottom }}px; --pill-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --pill-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px;"
+>
+  <div class="pill-links__inner">
+    {%- if section.settings.caption != blank -%}
+      <p class="pill-links__caption">{{ section.settings.caption | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.title != blank -%}
+      <h2 class="pill-links__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="pill-links__list" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.text != blank -%}
+            <li class="pill-links__item" {{ block.shopify_attributes }}>
+              {%- if block.settings.link != blank -%}
+                <a
+                  class="pill-links__pill"
+                  href="{{ block.settings.link }}"
+                  style="--pill-background: {{ block.settings.background }}; --pill-border-color: {{ block.settings.border_color }}; --pill-text-color: {{ block.settings.text_color }}; --pill-hover-background: {{ block.settings.hover_background }}; --pill-hover-text-color: {{ block.settings.hover_text_color }}; --pill-text-size: {{ block.settings.text_size }}px;"
+                >
+                  {{ block.settings.text }}
+                </a>
+              {%- else -%}
+                <span
+                  class="pill-links__pill"
+                  style="--pill-background: {{ block.settings.background }}; --pill-border-color: {{ block.settings.border_color }}; --pill-text-color: {{ block.settings.text_color }}; --pill-hover-background: {{ block.settings.hover_background }}; --pill-hover-text-color: {{ block.settings.hover_text_color }}; --pill-text-size: {{ block.settings.text_size }}px;"
+                >
+                  {{ block.settings.text }}
+                </span>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pill links",
+  "tag": "section",
+  "class": "pill-links-section section",
+  "max_blocks": 24,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "caption", "label": "Caption", "default": "THE COCOPOCO LIFE" },
+    { "type": "color", "id": "caption_color", "label": "Caption color", "default": "#7A5368" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Things worth romanticizing 🌸" },
+    { "type": "range", "id": "title_size", "label": "Title size", "min": 20, "max": 64, "step": 1, "unit": "px", "default": 32 },
+    { "type": "color", "id": "title_color", "label": "Title color", "default": "#2A0F1C" },
+    { "type": "color", "id": "background_color", "label": "Section background", "default": "#FFFFFF" },
+    { "type": "select", "id": "alignment", "label": "Pill alignment", "default": "center", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" }] },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "pill",
+      "name": "Pill",
+      "settings": [
+        { "type": "inline_richtext", "id": "text", "label": "Text", "default": "☕ Slow mornings" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "range", "id": "text_size", "label": "Text size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 13 },
+        { "type": "color", "id": "background", "label": "Background", "default": "#FFFFFF" },
+        { "type": "color", "id": "border_color", "label": "Border color", "default": "#F4C3DA" },
+        { "type": "color", "id": "text_color", "label": "Text color", "default": "#2A0F1C" },
+        { "type": "color", "id": "hover_background", "label": "Hover background", "default": "#E64D95" },
+        { "type": "color", "id": "hover_text_color", "label": "Hover text color", "default": "#FFFFFF" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pill links",
+      "blocks": [
+        { "type": "pill", "settings": { "text": "☕ Slow mornings" } },
+        { "type": "pill", "settings": { "text": "📓 Fresh pages" } },
+        { "type": "pill", "settings": { "text": "💻 Work days" } },
+        { "type": "pill", "settings": { "text": "🎧 Commutes" } },
+        { "type": "pill", "settings": { "text": "🌷 Getting ready" } },
+        { "type": "pill", "settings": { "text": "🎁 Giving gifts" } },
+        { "type": "pill", "settings": { "text": "🌞 Little everyday moments" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

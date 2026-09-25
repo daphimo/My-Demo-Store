@@ -1,0 +1,28 @@
+{{ 'about-us.css' | asset_url | stylesheet_tag }}
+<section class="about-us about-us-faq" style="--about-pt: {{ section.settings.padding_top }}px; --about-pb: {{ section.settings.padding_bottom }}px; --about-mpt: {{ section.settings.mobile_padding_top }}px; --about-mpb: {{ section.settings.mobile_padding_bottom }}px;">
+  <div class="about-us__container">
+    <h2 class="about-us__heading about-us-faq__heading">{{ section.settings.heading }}</h2>
+    <div class="about-us-faq__list">
+      {% for block in section.blocks %}
+        <details class="about-us-faq__item" {{ block.shopify_attributes }}>
+          <summary><span>{{ block.settings.question | escape }}</span><span class="about-us-faq__chevron" aria-hidden="true">⌄</span></summary>
+          <div class="about-us-faq__answer rte">{{ block.settings.answer }}</div>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "About FAQs",
+  "settings": [
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "FAQs" },
+    { "type": "range", "id": "padding_top", "label": "Desktop top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 96 },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 28 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 56 }
+  ],
+  "blocks": [{ "type": "faq", "name": "FAQ", "settings": [{"type":"text","id":"question","label":"Question","default":"Question"},{"type":"richtext","id":"answer","label":"Answer","default":"<p>Answer</p>"}] }],
+  "presets": [{ "name": "About FAQs", "blocks": [{"type":"faq","settings":{"question":"What is CocoPoco?","answer":"<p>An Indian e-commerce brand selling cute everyday essentials — kawaii stationery, sipper bottles, keychains, pouches and gift hampers — at cocopoco.in.</p>"}},{"type":"faq","settings":{"question":"Where is CocoPoco based?","answer":"<p>Kolkata, West Bengal, India. We ship to every state in India.</p>"}},{"type":"faq","settings":{"question":"Who founded CocoPoco?","answer":"<p>Sisters Smita Bara and Sweta Kindo, in 2024.</p>"}},{"type":"faq","settings":{"question":"What does “Romanticize your everyday” mean?","answer":"<p>Finding small joys in ordinary routines through cute, thoughtful things you use every day.</p>"}}] }]
+}
+{% endschema %}

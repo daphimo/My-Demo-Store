@@ -1,0 +1,187 @@
+.custom-collection-list {
+  padding-top: var(--collection-list-padding-top);
+  padding-bottom: var(--collection-list-padding-bottom);
+  background: var(--collection-list-background);
+}
+
+.custom-collection-list__inner {
+  width: min(calc(100% - 4rem), var(--section-page-width));
+  margin: 0 auto;
+}
+
+.custom-collection-list__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.custom-collection-list__title {
+  grid-column: 2;
+  margin: 0;
+  color: var(--collection-list-title-color);
+  font-family: var(--font-heading-family);
+  font-size: var(--collection-list-title-size);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.15;
+  text-align: center;
+}
+
+.custom-collection-list__view-all {
+  grid-column: 3;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--collection-list-link-color);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.17em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 200ms ease;
+}
+
+.custom-collection-list__view-all-icon,
+.custom-collection-list__view-all-icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.custom-collection-list__view-all-icon {
+  display: inline-flex;
+  transition: transform 200ms ease;
+}
+
+.custom-collection-list__view-all:hover {
+  color: var(--collection-list-link-hover-color);
+}
+
+.custom-collection-list__view-all:hover .custom-collection-list__view-all-icon {
+  transform: translateX(3px);
+}
+
+.custom-collection-list__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--collection-list-columns), minmax(0, 1fr));
+  align-items: start;
+  gap: 1rem;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 80%;
+  list-style: none;
+}
+
+.collection-circle-card {
+  min-width: 0;
+  text-align: center;
+}
+
+.collection-circle-card__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: var(--collection-list-item-color);
+  text-decoration: none;
+}
+
+.collection-circle-card__media {
+  position: relative;
+  width: min(100%, var(--collection-list-image-size));
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 50%;
+  background: rgba(230, 77, 149, 0.1);
+  transform: translateZ(0);
+}
+
+.collection-circle-card__image,
+.collection-circle-card__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.collection-circle-card__placeholder {
+  padding: 1rem;
+  color: rgba(230, 77, 149, 0.4);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.collection-circle-card__title {
+  display: block;
+  max-width: 100%;
+  color: inherit;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  transition: color 200ms ease;
+}
+
+.collection-circle-card__link:focus-visible {
+  outline: 2px solid var(--collection-list-link-color);
+  outline-offset: 5px;
+  border-radius: 0.4rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .collection-circle-card__link:hover .collection-circle-card__image,
+  .collection-circle-card__link:hover .collection-circle-card__placeholder {
+    transform: scale(1.08);
+  }
+
+  .collection-circle-card__link:hover .collection-circle-card__title {
+    color: var(--collection-list-link-color);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .custom-collection-list {
+    padding-top: var(--collection-list-mobile-padding-top);
+    padding-bottom: var(--collection-list-mobile-padding-bottom);
+  }
+
+  .custom-collection-list__inner {
+    width: min(calc(100% - 3.2rem), var(--section-page-width));
+  }
+
+  .custom-collection-list__header {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .custom-collection-list__title,
+  .custom-collection-list__view-all {
+    grid-column: 1;
+    justify-self: center;
+  }
+
+  .custom-collection-list__title {
+    font-size: clamp(2.2rem, 7vw, var(--collection-list-title-size));
+  }
+
+  .custom-collection-list__grid {
+    grid-template-columns: repeat(var(--collection-list-mobile-columns), minmax(0, 1fr));
+    gap: 1.8rem 1.2rem;
+  }
+
+  .collection-circle-card__title {
+    font-size: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collection-circle-card__image,
+  .collection-circle-card__placeholder,
+  .collection-circle-card__title,
+  .custom-collection-list__view-all-icon {
+    transition: none;
+  }
+}

@@ -1,0 +1,112 @@
+{{ 'quiz-popup.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'quiz-popup.js' | asset_url }}" defer="defer"></script>
+
+<section class="quiz-banner" style="--quiz-section-bg: {{ section.settings.section_background }}; --quiz-card-start: {{ section.settings.card_color_1 }}; --quiz-card-middle: {{ section.settings.card_color_2 }}; --quiz-card-end: {{ section.settings.card_color_3 }}; --quiz-accent: {{ section.settings.accent_color }}; --quiz-ink: {{ section.settings.text_color }}; --quiz-pt: {{ section.settings.padding_top }}px; --quiz-pb: {{ section.settings.padding_bottom }}px;" data-quiz-section>
+  <div class="quiz-banner__container">
+    <button class="quiz-banner__card" type="button" data-quiz-open aria-haspopup="dialog" aria-controls="QuizPopup-{{ section.id }}">
+      <span class="quiz-banner__copy">
+        {% if section.settings.trigger_pill != blank %}
+          <span class="quiz-banner__pill">{% render 'icons', icon: 'sparkles' %}{{ section.settings.trigger_pill | escape }}</span>
+        {% endif %}
+        {% if section.settings.trigger_title != blank %}<span class="quiz-banner__title">{{ section.settings.trigger_title }}</span>{% endif %}
+        {% if section.settings.trigger_content != blank %}<span class="quiz-banner__content">{{ section.settings.trigger_content }}</span>{% endif %}
+      </span>
+      <span class="quiz-banner__arrow" aria-hidden="true">{% render 'icons', icon: 'arrow-right' %}</span>
+    </button>
+  </div>
+
+  <div class="quiz-popup" id="QuizPopup-{{ section.id }}" data-quiz-popup role="dialog" aria-modal="true" aria-labelledby="QuizPopupTitle-{{ section.id }}" aria-hidden="true" hidden>
+    <button class="quiz-popup__overlay" type="button" data-quiz-close tabindex="-1" aria-label="Close quiz"></button>
+    <div class="quiz-popup__dialog">
+      <button class="quiz-popup__close" type="button" data-quiz-close aria-label="Close quiz"><span class="svg-wrapper">{{ 'icon-close.svg' | inline_asset_content }}</span></button>
+      <div class="quiz-popup__scroll">
+        <div class="quiz-popup__inner">
+          <header class="quiz-popup__header">
+            {% if section.settings.popup_pill != blank %}<p class="quiz-popup__pill">{% render 'icons', icon: 'sparkles' %}{{ section.settings.popup_pill | escape }}</p>{% endif %}
+            {% if section.settings.popup_title != blank %}<h2 class="quiz-popup__title" id="QuizPopupTitle-{{ section.id }}">{{ section.settings.popup_title }}</h2>{% endif %}
+            {% if section.settings.popup_content != blank %}<div class="quiz-popup__content">{{ section.settings.popup_content }}</div>{% endif %}
+          </header>
+          <div class="quiz-popup__grid">
+            {% for block in section.blocks %}
+              {% liquid
+                assign card_tag = 'div'
+                if block.settings.link != blank
+                  assign card_tag = 'a'
+                endif
+              %}
+              <{{ card_tag }} class="quiz-popup__option"{% if block.settings.link != blank %} href="{{ block.settings.link }}"{% endif %} style="--option-bg: {{ block.settings.background }};" {{ block.shopify_attributes }}>
+                <span class="quiz-popup__icon" aria-hidden="true">{% render 'icons', icon: block.settings.icon %}</span>
+                {% if block.settings.pill != blank %}<span class="quiz-popup__option-pill">{{ block.settings.pill | escape }}</span>{% endif %}
+                {% if block.settings.title != blank %}<h3 class="quiz-popup__option-title">{{ block.settings.title }}</h3>{% endif %}
+                {% if block.settings.content != blank %}<p class="quiz-popup__option-content">{{ block.settings.content | escape | newline_to_br }}</p>{% endif %}
+              </{{ card_tag }}>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Quiz popup",
+  "tag": "section",
+  "class": "section-quiz-popup",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "header", "content": "Section card" },
+    { "type": "text", "id": "trigger_pill", "label": "Pill", "default": "30-SEC QUIZ" },
+    { "type": "inline_richtext", "id": "trigger_title", "label": "Title", "default": "Not sure what to pick? Take the quiz 🎯" },
+    { "type": "inline_richtext", "id": "trigger_content", "label": "Content", "default": "We'll find the perfect CocoPoco vibe for you in seconds." },
+    { "type": "header", "content": "Popup" },
+    { "type": "text", "id": "popup_pill", "label": "Pill", "default": "30-SEC QUIZ" },
+    { "type": "inline_richtext", "id": "popup_title", "label": "Title", "default": "Who are you shopping for today?" },
+    { "type": "richtext", "id": "popup_content", "label": "Content", "default": "<p>Tap one — we'll curate the cutest picks just for you 💌</p>" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "section_background", "label": "Section background", "default": "#fff7fb" },
+    { "type": "color", "id": "card_color_1", "label": "Card gradient start", "default": "#f9cce5" },
+    { "type": "color", "id": "card_color_2", "label": "Card gradient middle", "default": "#eddcf8" },
+    { "type": "color", "id": "card_color_3", "label": "Card gradient end", "default": "#f9cce5" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#c861c9" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#3d1729" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Top padding", "default": 20 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bottom padding", "default": 20 }
+  ],
+  "blocks": [
+    {
+      "type": "option",
+      "name": "Quiz option",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "sparkles", "options": [
+          { "value": "sparkles", "label": "Sparkle" },
+          { "value": "briefcase", "label": "Bag" },
+          { "value": "baby", "label": "Child" },
+          { "value": "flower", "label": "Flower" },
+          { "value": "gift", "label": "Gift" },
+          { "value": "party-popper", "label": "Party popper" }
+        ]},
+        { "type": "text", "id": "pill", "label": "Pill", "default": "AESTHETIC FINDS" },
+        { "type": "inline_richtext", "id": "title", "label": "Title", "default": "For Me ✨" },
+        { "type": "textarea", "id": "content", "label": "Content", "default": "Teen / College girlie" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "color", "id": "background", "label": "Background", "default": "#f8e5f6" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quiz popup",
+      "blocks": [
+        { "type": "option", "settings": { "icon": "sparkles", "pill": "AESTHETIC FINDS", "title": "For Me ✨", "content": "Teen / College girlie", "background": "#f8e5f6" } },
+        { "type": "option", "settings": { "icon": "briefcase", "pill": "OFFICE AESTHETIC", "title": "Working Babe 💼", "content": "Young working woman", "background": "#f7e7f1" } },
+        { "type": "option", "settings": { "icon": "baby", "pill": "KID-APPROVED", "title": "Mom → Kids 🎀", "content": "Gifting my little one", "background": "#f7dcf0" } },
+        { "type": "option", "settings": { "icon": "flower", "pill": "SELF-LOVE", "title": "Mom → Me 🌸", "content": "A little something for myself", "background": "#f3d8f8" } },
+        { "type": "option", "settings": { "icon": "gift", "pill": "BESTIE-APPROVED", "title": "Gift for a Friend 🎁", "content": "Something cute for my bestie", "background": "#f9dce4" } },
+        { "type": "option", "settings": { "icon": "party-popper", "pill": "PARTY READY", "title": "Birthday Return Gifts 🎉", "content": "Mom planning party favors", "background": "#f5e7f6" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

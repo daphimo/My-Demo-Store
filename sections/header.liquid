@@ -1,0 +1,146 @@
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-localization-form.css' | asset_url }}" media="print" onload="this.media='all'">
+<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign header_tag = 'div'
+  if section.settings.sticky_header_type != 'none'
+    assign header_tag = 'sticky-header'
+  endif
+  assign show_language = false
+  if section.settings.show_language and localization.available_languages.size > 1
+    assign show_language = true
+  endif
+  assign show_currency = false
+  if section.settings.show_currency and localization.available_countries.size > 1
+    assign show_currency = true
+  endif
+-%}
+
+{{ 'section-header-custom.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-header-custom.js' | asset_url }}" defer="defer"></script>
+
+<{{ header_tag }}{% if header_tag == 'sticky-header' %} data-sticky-type="{{ section.settings.sticky_header_type }}"{% endif %}>
+  <div class="cp-header-shell{% if section.settings.show_line_separator %} cp-header-shell--border{% endif %} color-{{ section.settings.color_scheme }} gradient"
+    data-cp-header
+    data-open-first="{{ section.settings.open_first_mobile_item }}"
+    style="--section-page-width: {{ settings.page_width | divided_by: 10.0 }}rem; --cp-logo-width: {{ settings.logo_width }}px; --cp-padding-top: {{ section.settings.padding_top }}px; --cp-padding-bottom: {{ section.settings.padding_bottom }}px; --cp-margin-bottom: {{ section.settings.margin_bottom }}px; --cp-mobile-margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round }}px;">
+    <header class="cp-header">
+      <button class="cp-action cp-mobile-toggle" type="button" aria-label="{{ 'sections.header.menu' | t }}" aria-expanded="false" aria-controls="CpDrawer-{{ section.id }}" data-drawer-open>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="cp-header__brand">
+        {%- if request.page_type == 'index' -%}<h1 class="cp-header__brand">{%- endif -%}
+        <a href="{{ routes.root_url }}" class="cp-header__logo-link focus-inset">
+          {%- if settings.logo != blank -%}
+            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+            {{ settings.logo | image_url: width: 600 | image_tag: class: 'cp-header__logo', widths: '100, 150, 200, 300, 450, 600', width: settings.logo_width, height: logo_height, alt: logo_alt, preload: true }}
+          {%- else -%}<span class="cp-header__shop-name">{{ shop.name }}</span>{%- endif -%}
+        </a>
+        {%- if request.page_type == 'index' -%}</h1>{%- endif -%}
+      </div>
+      <nav class="cp-nav" aria-label="Primary navigation">
+        <ul class="cp-nav__list" role="list">
+          {%- for link in section.settings.menu.links -%}
+            <li class="cp-nav__entry">
+              {%- if link.links != blank -%}
+                <details class="cp-nav__details" data-desktop-disclosure>
+                  <summary class="cp-nav__summary{% if link.active or link.child_active %} is-active{% endif %}" aria-expanded="false">
+                    <span>{{ link.title | escape }}</span>
+                    <svg class="cp-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m2.5 4.5 3.5 3 3.5-3"/></svg>
+                  </summary>
+                  <ul class="cp-dropdown color-{{ section.settings.menu_color_scheme }} gradient" role="list">
+                    {%- for childlink in link.links -%}
+                      <li>
+                        <a href="{{ childlink.url }}" class="cp-dropdown__link{% if childlink.current %} is-active{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>{{ childlink.title | escape }}</a>
+                        {%- if childlink.links != blank -%}
+                          <ul class="cp-dropdown__nested" role="list">
+                            {%- for grandchildlink in childlink.links -%}
+                              <li><a href="{{ grandchildlink.url }}" class="cp-dropdown__link{% if grandchildlink.current %} is-active{% endif %}"{% if grandchildlink.current %} aria-current="page"{% endif %}>{{ grandchildlink.title | escape }}</a></li>
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </details>
+              {%- else -%}
+                <a href="{{ link.url }}" class="cp-nav__link{% if link.current %} is-active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+      <div class="cp-header__actions">
+        {%- if show_currency or show_language -%}
+          <div class="cp-localization">
+            {%- if show_currency -%}<localization-form>{%- form 'localization', id: 'CpHeaderCountryForm', class: 'localization-form' -%}<h2 class="visually-hidden" id="CpHeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>{%- render 'country-localization', localPosition: 'CpHeaderCountry' -%}{%- endform -%}</localization-form>{%- endif -%}
+            {%- if show_language -%}<localization-form>{%- form 'localization', id: 'CpHeaderLanguageForm', class: 'localization-form' -%}<h2 class="visually-hidden" id="CpHeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>{%- render 'language-localization', localPosition: 'CpHeaderLanguage' -%}{%- endform -%}</localization-form>{%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.show_search -%}<div class="cp-action">{% render 'header-search', input_id: 'CpSearch-In-Modal' %}</div>{%- endif -%}
+        {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
+          <a href="{{ routes.account_url }}" class="cp-action focus-inset" aria-label="{{ 'customer.log_in' | t }}"><span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span></a>
+        {%- endif -%}
+        {%- for block in section.blocks -%}{%- if block.type == '@app' -%}{% render block %}{%- endif -%}{%- endfor -%}
+        {%- assign wishlist_page = pages['wishlist'] -%}
+        <a href="{{ wishlist_page.url | default: '/pages/wishlist' }}" class="cp-action wishlist-header-link focus-inset" aria-label="Wishlist">
+          {% render 'wishlist-icon' %}{% unless settings.wishlist_flow == 'login_required' and customer == blank %}<span class="wishlist-count-bubble" hidden>0</span>{% endunless %}
+        </a>
+        <a href="{{ routes.cart_url }}" class="cp-action cp-cart-action focus-inset" id="cart-icon-bubble" aria-label="{{ 'templates.cart.cart' | t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag size-5" aria-hidden="true" data-tsd-source="/src/components/site/Header.tsx:227:13"><path d="M16 10a4 4 0 0 1-8 0"></path><path d="M3.103 6.034h17.794"></path><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0-2-2H5.4a2 2 0 0 0-2-2V6.667a2 2 0 0 1 .4-1.2l2-2.667A2 2 0 0 1 7 2h10a2 2 0 0 1 1.6.8l2 2.667a2 2 0 0 1 .4 1.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6.667a2 2 0 0 1 .4-1.2l2-2.667A2 2 0 0 1 7 2h10a2 2 0 0 1 1.6.8z"></path></svg>
+          {%- if cart != empty -%}<div class="cart-count-bubble">{%- if cart.item_count < 100 -%}<span aria-hidden="true">{{ cart.item_count }}</span>{%- endif -%}<span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span></div>{%- endif -%}
+        </a>
+      </div>
+    </header>
+    <button class="cp-drawer-overlay" type="button" aria-label="Close menu" tabindex="-1" data-drawer-close></button>
+    <aside class="cp-drawer" id="CpDrawer-{{ section.id }}" aria-hidden="true" aria-label="Mobile navigation" data-drawer>
+      <div class="cp-drawer__top"><button class="cp-action cp-drawer__close" type="button" aria-label="Close menu" data-drawer-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+      <div class="cp-drawer__scroll"><nav aria-label="Mobile navigation"><ul class="cp-mobile-menu" role="list">
+        {%- assign first_accordion_rendered = false -%}
+        {%- for link in section.settings.menu.links -%}
+          {%- assign is_first_accordion = false -%}
+          {%- if link.links != blank and first_accordion_rendered == false -%}{%- assign is_first_accordion = true -%}{%- assign first_accordion_rendered = true -%}{%- endif -%}
+          {% render 'header-mobile-menu-item', link: link, section_id: section.id, item_index: forloop.index, level: 1, is_first_accordion: is_first_accordion %}
+        {%- endfor -%}
+      </ul></nav></div>
+    </aside>
+  </div>
+</{{ header_tag }}>
+
+{%- if settings.cart_type == 'notification' -%}{%- render 'cart-notification', color_scheme: section.settings.color_scheme, desktop_menu_type: 'dropdown' -%}{%- endif -%}
+
+
+
+
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "class": "section-header",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "link_list", "id": "menu", "default": "main-menu", "label": "t:sections.header.settings.menu.label" },
+    { "type": "checkbox", "id": "show_search", "label": "Show search", "default": false },
+    { "type": "checkbox", "id": "show_account", "label": "Show account", "default": false },
+    { "type": "checkbox", "id": "show_language", "label": "Show language selector", "default": false },
+    { "type": "checkbox", "id": "show_currency", "label": "Show currency selector", "default": false },
+    { "type": "checkbox", "id": "open_first_mobile_item", "label": "Open first mobile menu item by default", "default": false },
+    { "type": "select", "id": "sticky_header_type", "default": "on-scroll-up", "label": "t:sections.header.settings.sticky_header_type.label", "options": [
+      { "value": "none", "label": "t:sections.header.settings.sticky_header_type.options__1.label" },
+      { "value": "on-scroll-up", "label": "t:sections.header.settings.sticky_header_type.options__2.label" },
+      { "value": "always", "label": "t:sections.header.settings.sticky_header_type.options__3.label" },
+      { "value": "reduce-logo-size", "label": "t:sections.header.settings.sticky_header_type.options__4.label" }
+    ]},
+    { "type": "checkbox", "id": "show_line_separator", "default": true, "label": "t:sections.header.settings.show_line_separator.label" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.all.colors.label", "default": "scheme-1" },
+    { "type": "color_scheme", "id": "menu_color_scheme", "label": "t:sections.header.settings.menu_color_scheme.label", "default": "scheme-1" },
+    { "type": "header", "content": "t:sections.all.spacing" },
+    { "type": "range", "id": "margin_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "t:sections.header.settings.margin_bottom.label", "default": 0 },
+    { "type": "range", "id": "padding_top", "min": 8, "max": 28, "step": 2, "unit": "px", "label": "t:sections.all.padding.padding_top", "default": 10 },
+    { "type": "range", "id": "padding_bottom", "min": 8, "max": 28, "step": 2, "unit": "px", "label": "t:sections.all.padding.padding_bottom", "default": 10 }
+  ],
+  "blocks": [{ "type": "@app" }]
+}
+{% endschema %}

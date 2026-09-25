@@ -1,0 +1,80 @@
+.section-marquee {
+  --marquee-item-gap: clamp(3.2rem, 4vw, 6.4rem);
+}
+
+.section-marquee .marquee {
+  width: 100%;
+  overflow: hidden;
+  color: var(--marquee-text);
+  background: var(--marquee-background);
+}
+
+.section-marquee .marquee__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: cp-marquee-scroll var(--marquee-duration) linear infinite;
+}
+
+.section-marquee .marquee__group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 100vw;
+}
+
+.section-marquee .marquee__set {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.section-marquee .marquee__item {
+  flex: none;
+  padding-right: var(--marquee-item-gap);
+  color: var(--marquee-text);
+  font-size: var(--marquee-font-size);
+  font-weight: 700;
+  line-height: 2.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.section-marquee .marquee__item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.section-marquee .marquee__item a:hover,
+.section-marquee .marquee__item a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+  .section-marquee .marquee--pause-on-hover:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+@keyframes cp-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .section-marquee {
+    --marquee-item-gap: 3.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-marquee .marquee__track {
+    animation-play-state: paused;
+  }
+}

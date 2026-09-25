@@ -1,0 +1,244 @@
+.cust-order-tracking {
+  padding-block: var(--cust-tracking-pt) var(--cust-tracking-pb);
+  color: #4a2638;
+  background: #fff;
+}
+
+.cust-order-tracking__container {
+  width: 100%;
+  max-width: var(--cust-tracking-width);
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+.cust-order-tracking__header {
+  max-width: 86rem;
+  margin-bottom: 3rem;
+}
+
+.cust-order-tracking--center .cust-order-tracking__header {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.cust-order-tracking__eyebrow {
+  margin: 0 0 1rem;
+  color: #a14a72;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.cust-order-tracking__title {
+  margin: 0;
+  color: #241226;
+  font-family: var(--font-heading-family);
+  font-size: clamp(3rem, 5vw, 4.6rem);
+  line-height: 1.1;
+}
+
+.cust-order-tracking__description {
+  margin: 1.2rem 0 0;
+  color: #806a75;
+  font-size: 1.45rem;
+  line-height: 1.6;
+}
+
+.cust-order-tracking__form {
+  display: grid;
+  max-width: 68rem;
+  margin-inline: auto;
+  gap: 1.6rem;
+}
+
+.cust-order-tracking__label {
+  display: block;
+  margin: 0 0 .8rem;
+  color: #241226;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cust-order-tracking--center .cust-order-tracking__label { text-align: left; }
+
+.cust-order-tracking__input {
+  width: 100%;
+  min-width: 0;
+  height: 5.2rem;
+  padding: 0 1.8rem;
+  color: #241226;
+  background: #fff;
+  border: .1rem solid rgba(230, 77, 149, .35);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 1.4rem;
+}
+
+.cust-order-tracking__input::placeholder { color: #9b8290; }
+
+.cust-order-tracking__button,
+.cust-order-tracking__shipment-link {
+  display: inline-flex;
+  min-height: 5.2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2.4rem;
+  color: #fff;
+  background: #e64d95;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.cust-order-tracking__button { justify-self: start; min-width: 16rem; }
+.cust-order-tracking--center .cust-order-tracking__button { justify-self: center; }
+.cust-order-tracking__button:disabled { cursor: wait; opacity: .7; }
+
+.cust-order-tracking__spinner {
+  display: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-left: .8rem;
+  border: .2rem solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: cust-order-tracking-spin .7s linear infinite;
+}
+
+.cust-order-tracking.is-loading .cust-order-tracking__spinner { display: block; }
+
+.cust-order-tracking__message {
+  max-width: 68rem;
+  margin: 1.4rem auto 0;
+  padding: 1.2rem 1.5rem;
+  color: #8b2635;
+  background: #fff0f2;
+  border-radius: 1rem;
+  font-size: 1.3rem;
+}
+
+.cust-order-tracking__results { margin-top: 3.2rem; }
+
+.cust-order-tracking__order {
+  margin: 0 0 1.8rem;
+  color: #241226;
+  font-family: var(--font-heading-family);
+  font-size: 2.8rem;
+}
+
+.cust-order-tracking__shipment + .cust-order-tracking__shipment {
+  margin-top: 3.2rem;
+  padding-top: 3.2rem;
+  border-top: .1rem solid rgba(230, 77, 149, .2);
+}
+
+.cust-order-tracking__shipment-number {
+  margin: 0 0 1rem;
+  color: #a14a72;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.cust-order-tracking__status-card {
+  padding: 2.8rem;
+  color: #241226;
+  background: #fff7fb;
+  border: .1rem solid rgba(230, 77, 149, .25);
+  border-radius: 2rem;
+}
+
+.cust-order-tracking__status-label {
+  margin: 0 0 1.4rem;
+  color: #a14a72;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+.cust-order-tracking__status {
+  margin: 0;
+  color: #241226;
+  font-family: var(--font-heading-family);
+  font-size: 2.8rem;
+  line-height: 1.15;
+}
+
+.cust-order-tracking__status-copy {
+  margin: .7rem 0 0;
+  color: #806a75;
+  font-size: 1.3rem;
+}
+
+.cust-order-tracking__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.6rem 0 0;
+}
+
+.cust-order-tracking__fact {
+  min-width: 0;
+  padding: 1.5rem;
+  background: #fff;
+  border: .1rem solid rgba(230, 77, 149, .2);
+  border-radius: 1.4rem;
+}
+
+.cust-order-tracking__fact dt {
+  margin: 0 0 .5rem;
+  color: #9a7184;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.cust-order-tracking__fact dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #241226;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.cust-order-tracking__shipment-link { min-height: 4.6rem; margin-top: 1.6rem; }
+
+.cust-order-tracking__timeline-wrap { max-width: 68rem; margin: 3rem auto 0; }
+.cust-order-tracking__timeline-title { margin: 0 0 2rem; color: #241226; font-family: var(--font-heading-family); font-size: 2.4rem; }
+.cust-order-tracking__timeline { margin: 0; padding: 0; list-style: none; }
+.cust-order-tracking__event { position: relative; display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: 1.3rem; padding-bottom: 2.2rem; }
+.cust-order-tracking__event:not(:last-child)::before { position: absolute; top: 2.2rem; bottom: 0; left: 1.1rem; width: .2rem; background: rgba(230, 77, 149, .25); content: ''; }
+.cust-order-tracking__event-dot { position: relative; z-index: 1; display: grid; place-items: center; width: 2.4rem; height: 2.4rem; color: #fff; background: #e64d95; border: .3rem solid #fff; border-radius: 50%; box-shadow: 0 0 0 .1rem rgba(230, 77, 149, .35); font-size: 1rem; font-weight: 800; }
+.cust-order-tracking__event-title { margin: .15rem 0 0; color: #241226; font-size: 1.45rem; font-weight: 700; }
+.cust-order-tracking__event-meta { margin: .45rem 0 0; color: #806a75; font-size: 1.2rem; line-height: 1.45; }
+
+.cust-order-tracking__input:focus-visible,
+.cust-order-tracking__button:focus-visible,
+.cust-order-tracking__shipment-link:focus-visible { outline: .25rem solid #e64d95; outline-offset: .3rem; }
+
+@keyframes cust-order-tracking-spin { to { transform: rotate(360deg); } }
+
+@media screen and (max-width: 749px) {
+  .cust-order-tracking { padding-block: var(--cust-tracking-mpt) var(--cust-tracking-mpb); }
+  .cust-order-tracking__container { padding-inline: 1.6rem; }
+  .cust-order-tracking__header { margin-bottom: 2.4rem; }
+  .cust-order-tracking__title { font-size: 3rem; }
+  .cust-order-tracking__button { width: 100%; }
+  .cust-order-tracking__status-card { padding: 2rem; }
+  .cust-order-tracking__status { font-size: 2.3rem; }
+  .cust-order-tracking__facts { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cust-order-tracking__spinner { animation-duration: 1.5s; }
+}

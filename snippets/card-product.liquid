@@ -1,0 +1,141 @@
+{% comment %}
+  Reusable product card. Compatible with the theme's existing card-product arguments.
+{% endcomment %}
+
+
+
+{%- liquid
+  assign first_variant = card_product.variants.first
+  if first_variant == blank
+    assign first_price = card_product.price
+    assign first_compare = card_product.compare_at_price
+  else
+    assign first_price = first_variant.price
+    assign first_compare = first_variant.compare_at_price
+  endif
+  assign has_saving = false
+  if first_compare != blank and first_compare > first_price
+    assign has_saving = true
+    assign saving = first_compare | minus: first_price
+  endif
+  assign is_bestseller = false
+  assign is_new = false
+  for tag in card_product.tags
+    assign normalized_tag = tag | strip | downcase
+    if normalized_tag == 'best seller' or normalized_tag == 'bestseller'
+      assign is_bestseller = true
+    elsif normalized_tag == 'new'
+      assign is_new = true
+    endif
+  endfor
+  assign available_variants = card_product.variants | where: 'available', true
+  assign direct_variant = available_variants.first
+  assign form_id = 'CpCardForm-' | append: section_id | append: '-' | append: card_product.id
+  assign popup_id = 'CpVariantPicker-' | append: section_id | append: '-' | append: card_product.id
+  assign popup_form_id = popup_id | append: '-form'
+  assign image_loading = 'lazy'
+  if lazy_load == false
+    assign image_loading = 'eager'
+  endif
+-%}
+
+<article class="cp-product-card">
+  <div class="cp-product-card__media">
+    <a class="cp-product-card__media-link"{% if card_product != blank %} href="{{ card_product.url }}"{% else %} role="link" aria-disabled="true"{% endif %} tabindex="-1">
+      {%- if card_product.featured_media != blank -%}
+        {{ card_product.featured_media | image_url: width: 900 | image_tag: class: 'cp-product-card__image', widths: '240, 360, 480, 600, 750, 900', sizes: '(min-width: 990px) 25vw, 86vw', loading: image_loading, alt: card_product.featured_media.alt | escape }}
+      {%- else -%}
+        {{ placeholder_image | default: 'product-apparel-1' | placeholder_svg_tag: 'cp-product-card__placeholder' }}
+      {%- endif -%}
+    </a>
+    {%- if card_product != blank -%}
+      {% render 'wishlist-button', product: card_product %}
+      {%- if has_saving -%}<span class="cp-product-card__badge cp-product-card__badge--save">Save {{ saving | money }}</span>
+      {%- elsif is_bestseller -%}<span class="cp-product-card__badge">Bestseller</span>
+      {%- elsif is_new -%}<span class="cp-product-card__badge">New</span>{%- endif -%}
+    {%- endif -%}
+  </div>
+
+  <div class="cp-product-card__body">
+    {%- if show_rating and card_product.metafields.reviews.rating.value != blank -%}
+      {%- assign rating_value = card_product.metafields.reviews.rating.value.rating | default: card_product.metafields.reviews.rating.value -%}
+      {%- assign rating_count = card_product.metafields.reviews.rating_count.value -%}
+      <div class="cp-product-card__rating" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, rating_max: card_product.metafields.reviews.rating.value.scale_max }}">
+        <span class="cp-product-card__star" aria-hidden="true">★</span><span>{{ rating_value }}</span>{%- if rating_count != blank -%}<span class="cp-product-card__rating-count">({{ rating_count }})</span>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if show_vendor and card_product.vendor != blank -%}<span class="cp-product-card__rating-count">{{ card_product.vendor | escape }}</span>{%- endif -%}
+    <a class="cp-product-card__title"{% if card_product != blank %} href="{{ card_product.url }}"{% else %} role="link" aria-disabled="true"{% endif %}>
+      {{ card_product.title | default: 'Product title' | escape }}
+    </a>
+
+    {%- if card_product.metafields.custom.card_highlight != blank -%}
+      <div class="cp-product-card__highlight">
+        {%- if card_product.metafields.custom.card_highlight.type contains 'rich_text' -%}{{ card_product.metafields.custom.card_highlight | metafield_tag }}{%- else -%}{{ card_product.metafields.custom.card_highlight.value | escape }}{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if card_product != blank -%}
+      <div class="cp-product-card__price"><span>{{ first_price | money }}</span>{%- if has_saving -%}<s class="cp-product-card__compare">{{ first_compare | money }}</s>{%- endif -%}</div>
+      {%- if quick_add != blank and quick_add != 'none' -%}<div class="cp-product-card__action">
+        {%- if available_variants.size == 1 -%}
+          <product-form data-section-id="{{ section_id }}">
+            {%- form 'product', card_product, id: form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <input type="hidden" name="id" value="{{ direct_variant.id }}" class="product-variant-id">
+              <button type="submit" name="add" class="cp-product-card__button"><span>{{ 'products.product.add_to_cart' | t }}</span>{% render 'loading-spinner' %}</button>
+            {%- endform -%}
+          </product-form>
+        {%- elsif available_variants.size > 1 -%}
+          <button type="button" class="cp-product-card__button" aria-haspopup="dialog" data-open-variant-picker="{{ popup_id }}">{{ 'products.product.add_to_cart' | t }}</button>
+        {%- else -%}
+          <button type="button" class="cp-product-card__button" disabled>{{ 'products.product.sold_out' | t }}</button>
+        {%- endif -%}
+      </div>{%- endif -%}
+    {%- endif -%}
+  </div>
+</article>
+
+{%- if card_product != blank and available_variants.size > 1 and quick_add != blank and quick_add != 'none' -%}
+  <template id="{{ popup_id }}-template">
+  <cp-variant-picker id="{{ popup_id }}" data-money-format="{{ shop.money_format | escape }}">
+    <button type="button" class="cp-variant-picker__backdrop" aria-label="{{ 'accessibility.close' | t }}" data-close></button>
+    <div class="cp-variant-picker__dialog" role="dialog" aria-modal="true" aria-labelledby="{{ popup_id }}-title" tabindex="-1">
+      <button type="button" class="cp-variant-picker__close" aria-label="{{ 'accessibility.close' | t }}" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      <div class="cp-variant-picker__images" data-popup-images>
+        {%- for media in card_product.media -%}
+          {%- if media.media_type == 'image' -%}<div class="cp-variant-picker__image-slide" data-media-id="{{ media.id }}">{{ media | image_url: width: 700 | image_tag: class: 'cp-variant-picker__image', widths: '300, 450, 600, 700', sizes: '(max-width: 749px) 100vw, 170px', loading: 'lazy' }}</div>{%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="cp-variant-picker__details">
+        <h2 class="cp-variant-picker__title" id="{{ popup_id }}-title">{{ card_product.title | escape }}</h2>
+        <div class="cp-variant-picker__price"><span data-popup-price>{{ first_price | money }}</span><s data-popup-compare{% unless has_saving %} hidden{% endunless %}>{{ first_compare | money }}</s></div>
+        <div class="cp-variant-picker__options">
+        {%- for option in card_product.options_with_values -%}
+            {%- assign option_index = forloop.index0 -%}
+            <div data-option-index="{{ forloop.index0 }}">
+              <span class="cp-variant-picker__option-name">{{ option.name | escape }}</span>
+              <div class="cp-variant-picker__values">
+                {%- for value in option.values -%}
+                  <button type="button" class="cp-variant-picker__value" data-variant-value data-value="{{ value | escape }}" aria-pressed="{% if first_variant.options[option_index] == value %}true{% else %}false{% endif %}">{{ value | escape }}</button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        <product-form class="cp-variant-picker__add" data-section-id="{{ section_id }}">
+          {%- form 'product', card_product, id: popup_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" value="{{ first_variant.id }}" class="product-variant-id">
+            <button type="submit" name="add" class="cp-product-card__button" data-popup-add data-add-label="{{ 'products.product.add_to_cart' | t }}" data-unavailable-label="{{ 'products.product.unavailable' | t }}"><span data-label>{{ 'products.product.add_to_cart' | t }}</span>{% render 'loading-spinner' %}</button>
+            <div class="product-form__error-message-wrapper cp-variant-picker__error" role="alert" hidden><span class="product-form__error-message"></span></div>
+          {%- endform -%}
+        </product-form>
+      </div>
+    </div>
+    <script type="application/json" data-product-variants>{{ card_product.variants | json }}</script>
+    <script type="application/json" data-variant-prices>{
+      {%- for variant in card_product.variants -%}"{{ variant.id }}":{"price":{{ variant.price | money | json }},"compare":{{ variant.compare_at_price | money | json }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}
+    }</script>
+  </cp-variant-picker>
+  </template>
+{%- endif -%}

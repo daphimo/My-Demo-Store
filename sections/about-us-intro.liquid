@@ -1,0 +1,52 @@
+{{ 'about-us.css' | asset_url | stylesheet_tag }}
+
+<section class="about-us about-us-intro" style="--about-pt: {{ section.settings.padding_top }}px; --about-pb: {{ section.settings.padding_bottom }}px; --about-mpt: {{ section.settings.mobile_padding_top }}px; --about-mpb: {{ section.settings.mobile_padding_bottom }}px;">
+  <div class="about-us__container">
+    <header class="about-us-intro__header">
+      {% if section.settings.eyebrow != blank %}<p class="about-us__eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      <h2 class="about-us__heading">{{ section.settings.heading }}</h2>
+    </header>
+    <div class="about-us-intro__grid">
+      <div class="about-us-intro__media">
+        {% if section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200', sizes: '(min-width: 750px) 32rem, calc(100vw - 32px)', class: 'about-us-intro__image' }}
+        {% else %}
+          {{ 'image' | placeholder_svg_tag: 'about-us__placeholder' }}
+        {% endif %}
+      </div>
+      <div class="about-us-intro__copy">
+        <h3>{{ section.settings.content_heading | escape }}</h3>
+        <div class="rte">{{ section.settings.content }}</div>
+        {% if section.settings.highlight != blank %}<p class="about-us-intro__highlight">{{ section.settings.highlight }}</p>{% endif %}
+        {% if section.settings.supporting_text != blank %}<p>{{ section.settings.supporting_text }}</p>{% endif %}
+        <div class="about-us-intro__pills" role="list">
+          {% for block in section.blocks %}
+            {% if block.settings.link != blank %}<a href="{{ block.settings.link }}" class="about-us-intro__pill" role="listitem" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>{% else %}<span class="about-us-intro__pill" role="listitem" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</span>{% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About introduction",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WHO WE ARE" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "India’s Cute Essentials Store" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "content_heading", "label": "Content heading", "default": "Who we are" },
+    { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Two sisters and mothers who couldn’t find trusted, affordable, on-trend cute stationery in India — so we built the store we wished existed.</p>" },
+    { "type": "inline_richtext", "id": "highlight", "label": "Highlight", "default": "Cute everyday essentials — why be boring when you can be cute?" },
+    { "type": "inline_richtext", "id": "supporting_text", "label": "Supporting text", "default": "If you carry it every day, it might as well make you smile." },
+    { "type": "range", "id": "padding_top", "label": "Desktop top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 28 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 28 }
+  ],
+  "blocks": [{ "type": "category", "name": "Category", "settings": [{ "type": "text", "id": "label", "label": "Label", "default": "Category" }, { "type": "url", "id": "link", "label": "Link" }] }],
+  "presets": [{ "name": "About introduction", "blocks": [{"type":"category","settings":{"label":"Stationery"}},{"type":"category","settings":{"label":"Sipper bottles"}},{"type":"category","settings":{"label":"Keychains & charms"}},{"type":"category","settings":{"label":"Bags & pouches"}},{"type":"category","settings":{"label":"Gifts & hampers"}},{"type":"category","settings":{"label":"The Cute Edit"}}] }]
+}
+{% endschema %}

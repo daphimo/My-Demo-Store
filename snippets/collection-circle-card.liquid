@@ -1,0 +1,47 @@
+{% comment %}
+  Renders a clickable circular collection card.
+
+  Accepts:
+  - collection: Shopify collection object
+  - image: optional image override
+  - placeholder: Shopify placeholder name
+{% endcomment %}
+
+{%- liquid
+  assign card_image = image
+  if card_image == blank and collection != blank
+    assign card_image = collection.featured_image
+  endif
+-%}
+
+<div class="collection-circle-card">
+  <a
+    class="collection-circle-card__link"
+    {% if collection != blank %}
+      href="{{ collection.url }}"
+    {% else %}
+      role="link" aria-disabled="true"
+    {% endif %}
+  >
+    <span class="collection-circle-card__media">
+      {%- if card_image != blank -%}
+        {{
+          card_image
+          | image_url: width: 700
+          | image_tag:
+            class: 'collection-circle-card__image',
+            widths: '160, 240, 320, 480, 600, 700',
+            sizes: '(max-width: 749px) 45vw, 180px',
+            loading: 'lazy',
+            alt: card_image.alt
+        }}
+      {%- else -%}
+        {{ placeholder | default: 'collection-apparel-1' | placeholder_svg_tag: 'collection-circle-card__placeholder' }}
+      {%- endif -%}
+    </span>
+    <span class="collection-circle-card__title">
+      {% assign title = block.settings.title | default: collection.title %}
+      {{ title | escape }}
+    </span>
+  </a>
+</div>

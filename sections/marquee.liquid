@@ -1,0 +1,144 @@
+{{ 'section-marquee.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="marquee{% if section.settings.pause_on_hover %} marquee--pause-on-hover{% endif %}"
+  role="region"
+  aria-label="Announcements"
+  style="--marquee-duration: {{ section.settings.animation_speed }}s; --marquee-background: {{ section.settings.background_color }}; --marquee-text: {{ section.settings.text_color }}; --marquee-font-size: {{ section.settings.text_size }}px;"
+>
+  <div class="marquee__track">
+    {%- for group_index in (1..2) -%}
+      <div class="marquee__group"{% if group_index == 2 %} aria-hidden="true"{% endif %}>
+        {%- for set_index in (1..6) -%}
+          <div class="marquee__set"{% if group_index == 1 and set_index > 1 %} aria-hidden="true"{% endif %}>
+            {%- for block in section.blocks -%}
+              {%- if block.settings.text != blank -%}
+                <div
+                  class="marquee__item"
+                  {% if group_index == 1 and set_index == 1 %}{{ block.shopify_attributes }}{% endif %}
+                >
+                  {%- if block.settings.link != blank -%}
+                    <a href="{{ block.settings.link }}">{{ block.settings.text }}</a>
+                  {%- else -%}
+                    {{ block.settings.text }}
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Marquee",
+  "tag": "section",
+  "class": "section-marquee",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#e74695"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 8,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "min": 10,
+      "max": 500,
+      "step": 5,
+      "unit": "s",
+      "label": "Animation Speed",
+      "default": 200
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause animation on hover",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Marquee item",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "FREE SHIPPING ON ORDERS ABOVE ₹999/-"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Marquee",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "DELIVERED IN 24–48 HOURS"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "PARTIAL COD AVAILABLE"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "FREE KEYCHAIN ON ORDERS ABOVE ₹999/-"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "ADDITIONAL 5% OFF ON ALL PREPAID ORDERS"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "₹99 FLAT SHIPPING CHARGES ON ALL ORDERS"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "DISPATCHED IN 24–48 HOURS"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

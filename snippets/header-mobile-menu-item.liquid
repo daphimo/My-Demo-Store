@@ -1,0 +1,24 @@
+{%- liquid
+  assign panel_id = 'CpMobilePanel-' | append: section_id | append: '-' | append: level | append: '-' | append: item_index | append: '-' | append: link.handle
+  assign next_level = level | plus: 1
+-%}
+<li class="cp-mobile-menu__item">
+  {%- if link.links != blank -%}
+    <button class="cp-mobile-menu__trigger" type="button" aria-expanded="false" aria-controls="{{ panel_id }}" data-accordion-trigger{% if is_first_accordion %} data-first-accordion{% endif %}>
+      <span>{{ link.title | escape }}</span>
+      <span class="cp-toggle-icon" aria-hidden="true">
+        <svg class="cp-toggle-icon__plus" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>
+        <svg class="cp-toggle-icon__minus" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10"/></svg>
+      </span>
+    </button>
+    <div class="cp-accordion-panel" id="{{ panel_id }}" aria-hidden="true">
+      <ul class="cp-mobile-menu cp-mobile-menu--nested" role="list">
+        {%- for childlink in link.links -%}
+          {% render 'header-mobile-menu-item', link: childlink, section_id: section_id, item_index: forloop.index, level: next_level, is_first_accordion: false %}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- else -%}
+    <a href="{{ link.url }}" class="cp-mobile-menu__link{% if link.current %} is-active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+  {%- endif -%}
+</li>

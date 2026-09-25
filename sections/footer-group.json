@@ -1,0 +1,186 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "store_details": {
+          "type": "store_details",
+          "settings": {
+            "logo_width": 100,
+            "content": "Little things that make ordinary days feel a little more special. Designed in India, packed with far too much love.",
+            "show_social": true
+          }
+        },
+        "navigate": {
+          "type": "menu",
+          "settings": {
+            "heading": "Navigate to",
+            "menu": "navigate-to"
+          }
+        },
+        "quick_links": {
+          "type": "menu",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "quick-links-1"
+          }
+        },
+        "information": {
+          "type": "menu",
+          "settings": {
+            "heading": "Information",
+            "menu": "information"
+          }
+        },
+        "follow_us": {
+          "type": "menu",
+          "settings": {
+            "heading": "Follow us",
+            "menu": "follow-us"
+          }
+        }
+      },
+      "block_order": [
+        "store_details",
+        "navigate",
+        "quick_links",
+        "information",
+        "follow_us"
+      ],
+      "settings": {
+        "background_color": "#fff0f7",
+        "text_color": "#4a1c32",
+        "accent_color": "#e64d95",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "mobile_padding_top": 32,
+        "mobile_padding_bottom": 32
+      }
+    },
+    "footer_utilities": {
+      "type": "footer-utilities",
+      "blocks": {
+        "secure": {
+          "type": "utility",
+          "settings": {
+            "icon": "star",
+            "text": "Secure payments"
+          }
+        },
+        "shipping": {
+          "type": "utility",
+          "settings": {
+            "icon": "truck",
+            "text": "₹99 flat shipping, pan-India"
+          }
+        },
+        "prepaid": {
+          "type": "utility",
+          "settings": {
+            "icon": "sparkles",
+            "text": "5% off on prepaid orders"
+          }
+        },
+        "gifting": {
+          "type": "utility",
+          "settings": {
+            "icon": "star",
+            "text": "Made for gifting"
+          }
+        }
+      },
+      "block_order": [
+        "secure",
+        "shipping",
+        "prepaid",
+        "gifting"
+      ],
+      "settings": {
+        "background_color": "#fff0f7",
+        "text_color": "#5f3a50",
+        "icon_color": "#e64d95",
+        "border_color": "#f7d5e5",
+        "follow_up_line": "Romanticize your everyday.",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "mobile_padding_top": 20,
+        "mobile_padding_bottom": 20
+      }
+    },
+    "floating_whatsapp": {
+      "type": "floating-whatsapp",
+      "settings": {
+        "whatsapp_number": "+91 85840 72905",
+        "message": "Hello, I would like to know more about your products.",
+        "accessible_label": "Chat with us on WhatsApp",
+        "enable_pulse": true,
+        "button_size": 56,
+        "bottom_spacing": 20,
+        "right_spacing": 20,
+        "enable_mobile": true,
+        "enable_desktop": true
+      }
+    },
+    "premium_popup": {
+      "type": "cust-premium-popup",
+      "settings": {
+        "enable_popup": true,
+        "popup_heading": "Get 10% Off Your First Order",
+        "popup_description": "Join our list for first access to new arrivals, offers and little everyday joys.",
+        "image_position": "left",
+        "trigger_type": "delay",
+        "trigger_delay": 5,
+        "scroll_percentage": 50,
+        "show_desktop": true,
+        "show_mobile": true,
+        "display_frequency": "session",
+        "enable_exit_intent": false,
+        "show_on_tab_return": false,
+        "primary_action": "email",
+        "email_placeholder": "Enter your email address",
+        "button_text": "Get My Offer",
+        "direct_link": "",
+        "open_new_tab": false,
+        "success_heading": "Thank You!",
+        "success_message": "You're successfully subscribed. Your exclusive offer is ready!",
+        "success_action": "discount",
+        "enable_discount": false,
+        "discount_code": "WELCOME10",
+        "discount_message": "Your exclusive discount code:",
+        "copy_button_text": "Copy Code",
+        "success_redirect": "",
+        "enable_badge": true,
+        "badge_text": "Get 10% Off",
+        "badge_position": "bottom-left",
+        "badge_icon": "gift",
+        "badge_background": "#111111",
+        "badge_text_color": "#ffffff",
+        "badge_delay": 0,
+        "popup_width": 600,
+        "overlay_opacity": 50,
+        "border_radius": 16,
+        "animation": "scale",
+        "popup_background": "#ffffff",
+        "popup_text_color": "#111111",
+        "button_color": "#111111"
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "footer_utilities",
+    "floating_whatsapp",
+    "premium_popup"
+  ]
+}

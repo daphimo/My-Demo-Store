@@ -1,0 +1,11 @@
+{%- if product.handle != blank -%}
+  {%- if settings.wishlist_flow == 'login_required' and customer == blank -%}
+    <a href="{{ routes.account_login_url }}" target="_blank" rel="noopener" class="wishlist-button{% if class != blank %} {{ class }}{% endif %}" aria-label="Sign in to use wishlist">
+      {% render 'wishlist-icon' %}
+    </a>
+  {%- else -%}
+    <button type="button" class="wishlist-button{% if class != blank %} {{ class }}{% endif %}" button-wishlist data-product-handle="{{ product.handle | escape }}" data-product-title="{{ product.title | escape }}" aria-label="Add {{ product.title | escape }} to wishlist" aria-pressed="false">
+      {% render 'wishlist-icon' %}
+    </button>
+  {%- endif -%}
+{%- endif -%}

@@ -1,0 +1,118 @@
+{{ 'section-instafeed.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="instafeed"
+  style="--section-page-width: {{ settings.page_width | divided_by: 10.0 }}rem; --instafeed-background: {{ section.settings.background_color }}; --instafeed-caption-color: {{ section.settings.caption_color }}; --instafeed-title-color: {{ section.settings.title_color }}; --instafeed-title-size: {{ section.settings.title_size }}px; --instafeed-description-color: {{ section.settings.description_color }}; --instafeed-description-size: {{ section.settings.description_size }}px; --instafeed-padding-top: {{ section.settings.padding_top }}px; --instafeed-padding-bottom: {{ section.settings.padding_bottom }}px; --instafeed-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --instafeed-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px;"
+>
+  <div class="instafeed__inner">
+    {%- if section.settings.caption != blank or section.settings.title != blank or section.settings.description != blank -%}
+      <div class="instafeed__header">
+        {%- if section.settings.caption != blank -%}<p class="instafeed__caption">{{ section.settings.caption | escape }}</p>{%- endif -%}
+        {%- if section.settings.title != blank -%}<h2 class="instafeed__title">{{ section.settings.title }}</h2>{%- endif -%}
+        {%- if section.settings.description != blank -%}<div class="instafeed__description">{{ section.settings.description }}</div>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <ul class="instafeed__grid" role="list">
+      {%- for block in section.blocks -%}
+        <li class="instafeed__item" {{ block.shopify_attributes }}>
+          {%- capture media_content -%}
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 700
+                | image_tag:
+                  class: 'instafeed__image',
+                  widths: '160, 240, 320, 480, 600, 700',
+                  sizes: '(max-width: 749px) 33vw, 17vw',
+                  loading: 'lazy',
+                  alt: block.settings.image.alt
+              }}
+            {%- else -%}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'instafeed__placeholder' }}
+            {%- endif -%}
+          {%- endcapture -%}
+
+          {%- if block.settings.link != blank -%}
+            <a class="instafeed__media" href="{{ block.settings.link }}"{% if block.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ media_content }}</a>
+          {%- else -%}
+            <div class="instafeed__media">{{ media_content }}</div>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="instafeed__button-wrap">
+        {% render 'button',
+          text: section.settings.button_label,
+          link: section.settings.button_link,
+          background: section.settings.button_background,
+          text_color: section.settings.button_text_color,
+          show_arrow: section.settings.button_show_arrow,
+          open_in_new_tab: section.settings.button_open_in_new_tab,
+          class: 'instafeed__button',
+          icon_class: 'instafeed__button-icon'
+        %}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Instafeed gallery",
+  "tag": "section",
+  "class": "instafeed-section section",
+  "max_blocks": 18,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "caption", "label": "Caption", "default": "@COCOPOCO" },
+    { "type": "color", "id": "caption_color", "label": "Caption color", "default": "#7A5368" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Your everyday, but cuter. 📸" },
+    { "type": "range", "id": "title_size", "label": "Title size", "min": 20, "max": 64, "step": 1, "unit": "px", "default": 30 },
+    { "type": "color", "id": "title_color", "label": "Title color", "default": "#2A0F1C" },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Customer photos • Unboxings • Desk setups • Bag dumps • Gifting moments • Journaling</p>" },
+    { "type": "range", "id": "description_size", "label": "Description size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 12 },
+    { "type": "color", "id": "description_color", "label": "Description color", "default": "#7A5368" },
+    { "type": "color", "id": "background_color", "label": "Section background", "default": "#FFFFFF" },
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Follow the fun" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "color", "id": "button_background", "label": "Button background", "default": "#FFFFFF" },
+    { "type": "color", "id": "button_text_color", "label": "Button text color", "default": "#2A0F1C" },
+    { "type": "checkbox", "id": "button_show_arrow", "label": "Show button arrow", "default": true },
+    { "type": "checkbox", "id": "button_open_in_new_tab", "label": "Open button in a new tab", "default": true },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url", "id": "link", "label": "Image link" },
+        { "type": "checkbox", "id": "open_in_new_tab", "label": "Open image link in a new tab", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instafeed gallery",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

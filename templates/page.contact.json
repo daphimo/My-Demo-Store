@@ -1,0 +1,51 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "intro": {
+      "type": "contact-intro",
+      "settings": {}
+    },
+    "heading": {
+      "type": "contact-get-in-touch",
+      "settings": {}
+    },
+    "methods": {
+      "type": "contact-methods",
+      "blocks": {
+        "call": { "type": "contact_method", "settings": { "icon": "phone", "heading": "Call Us", "content": "<p>+91 85840 72905</p>" } },
+        "whatsapp": { "type": "contact_method", "settings": { "icon": "phone", "heading": "WhatsApp", "content": "<p>+91 85840 72905</p>" } },
+        "email": { "type": "contact_method", "settings": { "icon": "mail", "heading": "Email", "content": "<p>info@cocopoco.in</p>" } },
+        "visit": { "type": "contact_method", "settings": { "icon": "location", "heading": "Visit Us", "content": "<p>Ground floor, Plot No A1-97, New Town, Kolkata – 700156</p>" } }
+      },
+      "block_order": ["call", "whatsapp", "email", "visit"],
+      "settings": {}
+    },
+    "form": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "Send us a message"
+      },
+      "blocks": {
+        "instagram": { "type": "quick_contact", "settings": { "icon": "instagram", "heading": "Instagram DMs", "content": "@cocopocothegiftshop" } },
+        "whatsapp": { "type": "quick_contact", "settings": { "icon": "phone", "heading": "WhatsApp", "content": "+91 85840 72905" } },
+        "email": { "type": "quick_contact", "settings": { "icon": "mail", "heading": "Email", "content": "info@cocopoco.in" } },
+        "hours": { "type": "quick_contact", "settings": { "icon": "clock", "heading": "Support hours", "content": "Mon–Sat, 10am–6pm" } }
+      },
+      "block_order": ["instagram", "whatsapp", "email", "hours"]
+    }
+  },
+  "order": [
+    "intro",
+    "heading",
+    "methods",
+    "form"
+  ]
+}

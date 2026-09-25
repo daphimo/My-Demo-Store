@@ -1,0 +1,161 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "benefit_shipping": {
+          "type": "benefit",
+          "settings": {
+            "icon": "truck",
+            "text": "₹99 flat shipping, pan-India",
+            "icon_color": "#e64d95",
+            "text_color": "#241226",
+            "icon_size": 16,
+            "text_size": 12
+          }
+        },
+        "benefit_quality": {
+          "type": "benefit",
+          "settings": {
+            "icon": "star",
+            "text": "Quality-checked before packing",
+            "icon_color": "#e64d95",
+            "text_color": "#241226",
+            "icon_size": 16,
+            "text_size": 12
+          }
+        },
+        "benefit_secure": {
+          "type": "benefit",
+          "settings": {
+            "icon": "sparkles",
+            "text": "Secure payments",
+            "icon_color": "#e64d95",
+            "text_color": "#241226",
+            "icon_size": 16,
+            "text_size": 12
+          }
+        },
+        "benefit_support": {
+          "type": "benefit",
+          "settings": {
+            "icon": "rotate",
+            "text": "Easy support",
+            "icon_color": "#e64d95",
+            "text_color": "#241226",
+            "icon_size": 16,
+            "text_size": 12
+          }
+        },
+        "pincode_checker": {
+          "type": "pincode_checker",
+          "settings": {
+            "heading": "Check delivery availability",
+            "description": "Enter your 6-digit pincode to check delivery options.",
+            "input_placeholder": "Enter your pincode",
+            "button_text": "Check",
+            "loading_text": "Checking availability...",
+            "success_message": "Delivery available to [pincode].",
+            "unavailable_message": "Sorry, delivery is currently unavailable to this pincode.",
+            "invalid_message": "Please enter a valid 6-digit pincode.",
+            "error_message": "We couldn't check availability right now. Please try again.",
+            "show_cod": true,
+            "show_prepaid": true,
+            "show_location": true,
+            "proxy_endpoint": "/apps/delhivery-serviceability"
+          }
+        },
+        "details": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Details & specs",
+            "content": "{{ product.description }}",
+            "open_by_default": false
+          }
+        },
+        "shipping": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Shipping & delivery",
+            "content": "",
+            "open_by_default": false
+          }
+        },
+        "quality": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Quality promise",
+            "content": "",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "benefit_shipping",
+        "benefit_quality",
+        "benefit_secure",
+        "benefit_support",
+        "pincode_checker",
+        "details",
+        "shipping",
+        "quality"
+      ],
+      "settings": {
+        "background_color": "#ffffff",
+        "accent_color": "#e64d95",
+        "product_message": "",
+        "picker_type": "button",
+        "swatch_shape": "circle",
+        "show_dynamic_checkout": true,
+        "show_gift_card_recipient": true,
+        "padding_top": 40,
+        "padding_bottom": 60,
+        "mobile_padding_top": 16,
+        "mobile_padding_bottom": 40
+      }
+    },
+    "disclosures": {
+      "type": "disclosures",
+      "settings": {
+        "heading": "Disclosures",
+        "heading_size": "h2",
+        "open_by_default": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "main",
+    "disclosures",
+    "related-products"
+  ]
+}

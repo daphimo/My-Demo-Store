@@ -1,0 +1,156 @@
+.custom-email-signup {
+  color: var(--email-signup-text);
+  margin-block: var(--email-signup-margin-top) var(--email-signup-margin-bottom);
+}
+
+.custom-email-signup__page {
+  width: min(100%, var(--email-signup-page-width));
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.custom-email-signup__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3.2rem clamp(1.6rem, 5vw, 5rem);
+  overflow: hidden;
+  text-align: center;
+  background: var(--email-signup-background);
+  border-radius: var(--email-signup-radius);
+}
+
+.custom-email-signup__title {
+  max-width: 90rem;
+  margin: 0;
+  color: var(--title-color);
+  font-size: var(--title-size) !important;
+  line-height: 1.15;
+}
+
+.custom-email-signup__content {
+  max-width: 68rem;
+  margin-top: 1rem;
+  color: var(--content-color);
+  font-size: calc(var(--content-size) / 10 * 1rem);
+  line-height: 1.55;
+}
+
+.custom-email-signup__content > * {
+  margin-block: 0;
+}
+
+.custom-email-signup__form-wrap {
+  width: min(100%, 58rem);
+  margin-top: 2rem;
+}
+
+.custom-email-signup__field-row {
+  display: flex;
+  gap: 1rem;
+  padding: .5rem;
+  background: #fff;
+  border-radius: 999px;
+}
+
+.custom-email-signup__input {
+  min-width: 0;
+  flex: 1;
+  padding: 1rem 1.6rem;
+  color: #2a0f1c;
+  font: inherit;
+  background: transparent;
+  border: 0;
+  outline: 0;
+}
+
+.custom-email-signup__input:focus-visible {
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.custom-email-signup__button {
+  display: inline-flex;
+  min-height: 4.4rem;
+  align-items: center;
+  justify-content: center;
+  gap: .8rem;
+  padding: 1rem 2.2rem;
+  color: var(--signup-button-color);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--signup-button-bg);
+  border: 0;
+  border-radius: 999px;
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.custom-email-signup__button:hover {
+  filter: brightness(.95);
+  transform: translateY(-1px);
+}
+
+.custom-email-signup__button-icon,
+.custom-email-signup__button-icon svg {
+  display: block;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.custom-email-signup__message {
+  display: block;
+  margin: .8rem 0 0;
+  color: inherit;
+  font-size: 1.2rem;
+}
+
+.custom-email-signup__trust {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  margin-top: 1.8rem;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  opacity: .82;
+}
+
+.custom-email-signup__dot {
+  width: .4rem;
+  height: .4rem;
+  flex: 0 0 .4rem;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 749px) {
+  .custom-email-signup__page {
+    padding-inline: 1rem;
+  }
+
+  .custom-email-signup__inner {
+    padding: 2.8rem 1.6rem;
+  }
+
+  .custom-email-signup__field-row {
+    flex-direction: column;
+    padding: .7rem;
+    border-radius: 1.8rem;
+  }
+
+  .custom-email-signup__input {
+    min-height: 4.4rem;
+  }
+
+  .custom-email-signup__button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-email-signup__button {
+    transition: none;
+  }
+}

@@ -1,0 +1,96 @@
+{{ 'main-policy.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign policy_title = policy.title
+  assign policy_body = policy.body
+  if policy_title == blank
+    assign policy_title = page.title
+  endif
+  if policy_body == blank
+    assign policy_body = page.content
+  endif
+  assign back_link_url = section.settings.back_link_url
+  if back_link_url == blank
+    assign back_link_url = routes.root_url
+  endif
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --policy-background: {{ section.settings.background_color }};
+    --policy-card-background: {{ section.settings.card_background }};
+    --policy-card-border: {{ section.settings.card_border_color }};
+    --policy-accent: {{ section.settings.accent_color }};
+    --policy-primary: {{ section.settings.primary_text_color }};
+    --policy-secondary: {{ section.settings.secondary_text_color }};
+    --policy-padding-top: {{ section.settings.padding_top }}px;
+    --policy-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --policy-mobile-padding-top: {{ section.settings.mobile_padding_top }}px;
+    --policy-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<main class="policy-page">
+  <div class="policy-page__container">
+    {%- if section.settings.show_back_link and section.settings.back_link_text != blank -%}
+      <a class="policy-page__back" href="{{ back_link_url }}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+        <span>{{ section.settings.back_link_text | escape }}</span>
+      </a>
+    {%- endif -%}
+
+    <header class="policy-page__header">
+      {%- if section.settings.eyebrow != blank -%}<p class="policy-page__eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h1 class="policy-page__title">{{ policy_title | escape }}</h1>
+    </header>
+
+    {%- if policy_body != blank -%}
+      <div class="policy-page__card">
+        <div class="policy-page__content rte">{{ policy_body }}</div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.question_text != blank or section.settings.contact_text != blank or section.settings.follow_up_text != blank -%}
+      <p class="policy-page__contact">
+        {%- if section.settings.question_text != blank -%}<span>{{ section.settings.question_text | escape }}</span>{%- endif -%}
+        {%- if section.settings.contact_text != blank -%}
+          {%- if section.settings.contact_url != blank -%}<a href="{{ section.settings.contact_url }}">{{ section.settings.contact_text | escape }}</a>{%- else -%}<span class="policy-page__contact-emphasis">{{ section.settings.contact_text | escape }}</span>{%- endif -%}
+        {%- endif -%}
+        {%- if section.settings.follow_up_text != blank -%}<span>— {{ section.settings.follow_up_text | escape }}</span>{%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+</main>
+
+{% schema %}
+{
+  "name": "Main policy",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_back_link", "label": "Show back to shopping link", "default": true },
+    { "type": "text", "id": "back_link_text", "label": "Back link text", "default": "Back to shopping" },
+    { "type": "url", "id": "back_link_url", "label": "Back link URL" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "OUR REFUND & EXCHANGE POLICY" },
+    { "type": "header", "content": "Message below card" },
+    { "type": "text", "id": "question_text", "label": "Question text", "default": "Still have a question?" },
+    { "type": "text", "id": "contact_text", "label": "Contact link text", "default": "Get in touch" },
+    { "type": "url", "id": "contact_url", "label": "Contact link" },
+    { "type": "text", "id": "follow_up_text", "label": "Follow-up text", "default": "we reply within a day." },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "color", "id": "card_background", "label": "Card background", "default": "#FFFFFF" },
+    { "type": "color", "id": "card_border_color", "label": "Card border color", "default": "#F2D9E4" },
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#E64D95" },
+    { "type": "color", "id": "primary_text_color", "label": "Primary text color", "default": "#241226" },
+    { "type": "color", "id": "secondary_text_color", "label": "Secondary text color", "default": "#806A75" },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Desktop top padding", "min": 20, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom padding", "min": 20, "max": 160, "step": 4, "unit": "px", "default": 80 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 16, "max": 100, "step": 4, "unit": "px", "default": 28 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 16, "max": 100, "step": 4, "unit": "px", "default": 48 }
+  ],
+  "presets": [{ "name": "Main policy" }]
+}
+{% endschema %}

@@ -1,0 +1,83 @@
+{{ 'component-rating.css' | asset_url | stylesheet_tag }}
+{{ 'quick-add.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign view_more_url = section.settings.view_more_link
+  if view_more_url == blank and section.settings.collection != blank
+    assign view_more_url = section.settings.collection.url
+  endif
+-%}
+
+{{ 'section-featured-collection-custom.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card-custom.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-product-card-custom.js' | asset_url }}" defer="defer"></script>
+
+<section
+  class="featured-collection-custom color-{{ section.settings.color_scheme }} gradient"
+  style="--section-page-width: {{ settings.page_width | divided_by: 10.0 }}rem; --fc-padding-top: {{ section.settings.padding_top }}px; --fc-padding-bottom: {{ section.settings.padding_bottom }}px; --fc-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --fc-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px; --fc-columns: {{ section.settings.products_per_row }}; --fc-mobile-columns: {{ section.settings.products_per_row_mobile }};"
+>
+  <div class="featured-collection-custom__inner">
+    <div class="featured-collection-custom__header">
+      <div class="featured-collection-custom__heading">
+        {%- if section.settings.caption != blank -%}<p class="featured-collection-custom__caption">{{ section.settings.caption | escape }}</p>{%- endif -%}
+        {%- if section.settings.title != blank -%}<h2 class="featured-collection-custom__title">{{ section.settings.title }}</h2>{%- endif -%}
+      </div>
+      {%- if section.settings.view_more_text != blank and view_more_url != blank -%}
+        <a href="{{ view_more_url }}" class="featured-collection-custom__view-more">
+          <span>{{ section.settings.view_more_text | escape }}</span>
+          {%- if section.settings.show_view_more_arrow -%}<span class="featured-collection-custom__view-more-icon">{% render 'icons', icon: 'arrow-right' %}</span>{%- endif -%}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <ul class="featured-collection-custom__products{% if section.settings.enable_mobile_slider %} is-slider{% if section.settings.products_per_row_mobile == '2' %} is-slider--two{% endif %}{% endif %}" role="list">
+      {%- if section.settings.collection != blank -%}
+        {%- assign skip_card_product_styles = false -%}
+        {%- for product in section.settings.collection.products limit: section.settings.maximum_products -%}
+          <li class="featured-collection-custom__product">
+            {% render 'card-product', card_product: product, media_aspect_ratio: 'square', show_rating: true, quick_add: 'standard', section_id: section.id, lazy_load: true, skip_styles: skip_card_product_styles %}
+          </li>
+          {%- assign skip_card_product_styles = true -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign skip_card_product_styles = false -%}
+        {%- for index in (1..section.settings.maximum_products) -%}
+          <li class="featured-collection-custom__product">
+            {% render 'card-product', section_id: section.id, placeholder_image: 'product-apparel-1', quick_add: 'standard', skip_styles: skip_card_product_styles %}
+          </li>
+          {%- assign skip_card_product_styles = true -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "tag": "section",
+  "class": "featured-collection-section section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "BESTSELLERS" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Everyone's little obsessions 🌸" },
+    { "type": "text", "id": "view_more_text", "label": "View More text", "default": "VIEW MORE" },
+    { "type": "url", "id": "view_more_link", "label": "Custom View More link", "info": "Defaults to the selected collection when blank." },
+    { "type": "checkbox", "id": "show_view_more_arrow", "label": "Show arrow on View More", "default": true },
+    { "type": "select", "id": "products_per_row", "label": "Products per row on desktop", "default": "4", "options": [{ "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }, { "value": "5", "label": "5" }, { "value": "6", "label": "6" }] },
+    { "type": "select", "id": "products_per_row_mobile", "label": "Products per row on mobile", "default": "1", "options": [{ "value": "1", "label": "1" }, { "value": "2", "label": "2" }] },
+    { "type": "checkbox", "id": "enable_mobile_slider", "label": "Enable mobile slider", "default": true },
+    { "type": "range", "id": "maximum_products", "label": "Maximum products", "min": 4, "max": 12, "step": 1, "default": 4 },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Desktop top spacing", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom spacing", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top spacing", "min": 0, "max": 100, "step": 2, "unit": "px", "default": 30 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom spacing", "min": 0, "max": 100, "step": 2, "unit": "px", "default": 30 }
+  ],
+  "presets": [{ "name": "Featured collection" }]
+}
+{% endschema %}

@@ -1,0 +1,107 @@
+{{ 'custom-footer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'custom-footer.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --footer-page-width: {{ settings.page_width | divided_by: 10.0 }}rem;
+    --footer-bg: {{ section.settings.background_color }};
+    --footer-color: {{ section.settings.text_color }};
+    --footer-accent: {{ section.settings.accent_color }};
+    --footer-padding-top: {{ section.settings.padding_top }}px;
+    --footer-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --footer-mobile-padding-top: {{ section.settings.mobile_padding_top }}px;
+    --footer-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<footer class="custom-footer" data-custom-footer data-section-id="{{ section.id }}">
+  <div class="custom-footer__inner">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'store_details' -%}
+          <div class="custom-footer__store" {{ block.shopify_attributes }}>
+            {%- liquid
+              assign footer_logo = block.settings.logo
+              if footer_logo == blank
+                assign footer_logo = settings.logo
+              endif
+            -%}
+            <a class="custom-footer__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+              {%- if footer_logo != blank -%}
+                {%- assign logo_width_2x = block.settings.logo_width | times: 2 -%}
+                {{ footer_logo | image_url: width: logo_width_2x | image_tag: class: 'custom-footer__logo', widths: '50, 100, 150, 200, 250, 300, 400, 500, 600', width: block.settings.logo_width, loading: 'lazy', alt: shop.name }}
+              {%- else -%}
+                <span class="custom-footer__brand-text">{{ shop.name }}</span>
+              {%- endif -%}
+            </a>
+            {%- if block.settings.content != blank -%}<div class="custom-footer__description rte">{{ block.settings.content }}</div>{%- endif -%}
+            {%- if block.settings.show_social -%}{% render 'social-icons', class: 'custom-footer__social' %}{%- endif -%}
+          </div>
+        {%- when 'menu' -%}
+          {%- assign panel_id = 'FooterMenu-' | append: section.id | append: '-' | append: block.id -%}
+          <div class="custom-footer__menu" data-footer-menu {{ block.shopify_attributes }}>
+            <button class="custom-footer__menu-toggle" type="button" aria-expanded="false" aria-controls="{{ panel_id }}" data-footer-toggle>
+              <span>{{ block.settings.heading | escape }}</span>
+              <span class="custom-footer__toggle-icon" aria-hidden="true"><span></span><span></span></span>
+            </button>
+            <div class="custom-footer__menu-panel" id="{{ panel_id }}" data-footer-panel>
+              {%- if block.settings.menu != blank -%}
+                <ul class="custom-footer__menu-list" role="list">
+                  {%- for link in block.settings.menu.links -%}
+                    <li><a class="custom-footer__menu-link{% if link.active or link.child_active %} is-active{% endif %}" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "section",
+  "class": "section-footer",
+  "settings": [
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFF0F7" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#4A1C32" },
+    { "type": "color", "id": "accent_color", "label": "Hover color", "default": "#E64D95" },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Desktop top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 32 }
+  ],
+  "blocks": [
+    {
+      "type": "store_details", "name": "Store details", "limit": 1,
+      "settings": [
+        { "type": "image_picker", "id": "logo", "label": "Logo" },
+        { "type": "range", "id": "logo_width", "label": "Logo width", "min": 50, "max": 300, "step": 5, "unit": "px", "default": 100 },
+        { "type": "inline_richtext", "id": "content", "label": "Content", "default": "Little things that make ordinary days feel a little more special. Designed in India, packed with far too much love." },
+        { "type": "checkbox", "id": "show_social", "label": "Show social icons", "default": true }
+      ]
+    },
+    {
+      "type": "menu", "name": "Menu",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Navigate to" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Footer",
+    "blocks": [
+      { "type": "store_details" },
+      { "type": "menu", "settings": { "heading": "Navigate to" } },
+      { "type": "menu", "settings": { "heading": "Quick links" } },
+      { "type": "menu", "settings": { "heading": "Information" } },
+      { "type": "menu", "settings": { "heading": "Follow us" } }
+    ]
+  }]
+}
+{% endschema %}

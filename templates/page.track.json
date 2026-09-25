@@ -1,0 +1,53 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "cust_delhivery_tracking_7Ard6U": {
+      "type": "cust-order-tracking",
+      "name": "Order Tracking",
+      "settings": {
+        "eyebrow": "TRACK YOUR ORDER",
+        "title": "Track Your Order",
+        "description": "Enter your order number and the email address or phone number used at checkout.",
+        "order_label": "Order Number",
+        "order_placeholder": "For example, #1052",
+        "contact_label": "Email / Phone",
+        "contact_placeholder": "Enter the email or phone used at checkout",
+        "button_text": "Track Order",
+        "loading_message": "Fetching your tracking information...",
+        "not_found_message": "We couldn't find an order with those details. Please check your order number and contact information.",
+        "unshipped_message": "Your order has been confirmed but hasn't been shipped yet. Tracking information will appear once your shipment is dispatched.",
+        "no_tracking_message": "Tracking information is not available yet.",
+        "unknown_carrier_message": "Tracking information is currently unavailable.",
+        "error_message": "We couldn't retrieve your tracking information right now. Please try again later.",
+        "show_timeline": true,
+        "proxy_endpoint": "/apps/order-tracking",
+        "section_width": 900,
+        "alignment": "center",
+        "padding_top": 64,
+        "padding_bottom": 80,
+        "mobile_padding_top": 40,
+        "mobile_padding_bottom": 56
+      }
+    }
+  },
+  "order": [
+    "main",
+    "cust_delhivery_tracking_7Ard6U"
+  ]
+}

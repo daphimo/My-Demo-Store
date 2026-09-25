@@ -1,0 +1,112 @@
+.pill-links-section .pill-links {
+  padding-top: var(--pill-padding-top);
+  padding-bottom: var(--pill-padding-bottom);
+  background: var(--pill-section-background);
+}
+
+.pill-links-section .pill-links__inner {
+  width: min(calc(100% - 4rem), var(--section-page-width));
+  margin: 0 auto;
+  text-align: center;
+}
+
+.pill-links-section .pill-links__caption {
+  margin: 0 0 0.8rem;
+  color: var(--pill-caption-color);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.pill-links-section .pill-links__title {
+  margin: 0;
+  color: var(--pill-title-color);
+  font-family: var(--font-heading-family);
+  font-size: var(--pill-title-size);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.15;
+}
+
+.pill-links-section .pill-links__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: var(--pill-alignment);
+  gap: 1rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pill-links-section .pill-links__item {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.pill-links-section .pill-links__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.6rem;
+  max-width: 100%;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--pill-border-color);
+  border-radius: 999px;
+  color: var(--pill-text-color);
+  background: var(--pill-background);
+  font-size: var(--pill-text-size);
+  line-height: 1.2;
+  text-decoration: none;
+  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+
+.pill-links-section a.pill-links__pill:hover {
+  border-color: var(--pill-hover-background);
+  color: var(--pill-hover-text-color);
+  background: var(--pill-hover-background);
+  transform: translateY(-1px);
+}
+
+.pill-links-section a.pill-links__pill:focus-visible {
+  outline: 2px solid var(--pill-border-color);
+  outline-offset: 3px;
+}
+
+.pill-links-section .pill-links__pill p {
+  margin: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .pill-links-section .pill-links {
+    padding-top: var(--pill-mobile-padding-top);
+    padding-bottom: var(--pill-mobile-padding-bottom);
+  }
+
+  .pill-links-section .pill-links__inner {
+    width: min(calc(100% - 3.2rem), var(--section-page-width));
+  }
+
+  .pill-links-section .pill-links__title {
+    font-size: clamp(2.2rem, 8vw, var(--pill-title-size));
+  }
+
+  .pill-links-section .pill-links__list {
+    gap: 0.8rem;
+    margin-top: 1.6rem;
+  }
+
+  .pill-links-section .pill-links__pill {
+    min-height: 3.4rem;
+    padding: 0.7rem 1.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill-links-section .pill-links__pill {
+    transition: none;
+  }
+}

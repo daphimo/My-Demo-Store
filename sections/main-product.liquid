@@ -1,0 +1,222 @@
+{{ 'main-product-custom.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-rating.css' | asset_url | stylesheet_tag }}
+{{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+{{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
+{{ 'component-swatch.css' | asset_url | stylesheet_tag }}
+{{ 'cust-pincode-checker.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'main-product-custom.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'cust-pincode-checker.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --main-product-page-width: {{ settings.page_width | divided_by: 10.0 }}rem;
+    --main-product-bg: {{ section.settings.background_color }};
+    --main-product-accent: {{ section.settings.accent_color }};
+    --main-product-padding-top: {{ section.settings.padding_top }}px;
+    --main-product-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --main-product-mobile-padding-top: {{ section.settings.mobile_padding_top }}px;
+    --main-product-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign selected_variant = product.selected_or_first_available_variant
+  assign fallback_collection = collection
+  if fallback_collection == blank
+    assign fallback_collection = product.collections | first
+  endif
+  assign product_form_id = 'product-form-' | append: section.id
+  assign rating_value = product.metafields.reviews.rating.value.rating | default: product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value
+-%}
+
+<product-info id="MainProduct-{{ section.id }}" class="main-product" data-section="{{ section.id }}" data-product-id="{{ product.id }}" data-update-url="true" data-url="{{ product.url }}" data-money-format="{{ shop.money_format | escape }}">
+  <product-component view-event-payload="{{ product | standard_event_data: 'view', context: 'page' | escape }}">
+    <div class="main-product__inner">
+      <nav class="main-product__breadcrumbs" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span>
+        <a href="{% if fallback_collection != blank %}{{ fallback_collection.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}" data-product-collection-link>{% if fallback_collection != blank %}{{ fallback_collection.title | escape }}{% else %}Shop{% endif %}</a>
+        <span aria-hidden="true">/</span><span aria-current="page">{{ product.title | escape }}</span>
+      </nav>
+
+      <div class="main-product__layout">
+        <div class="main-product__media">
+          <div class="main-product__media-slider" role="list" aria-label="{{ product.title | escape }} media">
+            {%- for media in product.media -%}
+              <div class="main-product__media-slide{% if forloop.first %} main-product__media-slide--primary{% endif %}" role="listitem" data-media-id="{{ section.id }}-{{ media.id }}">
+                {%- if media.media_type == 'image' -%}
+                  {%- liquid
+                    assign media_loading = 'lazy'
+                    assign media_priority = 'auto'
+                    if forloop.first
+                      assign media_loading = 'eager'
+                      assign media_priority = 'high'
+                    endif
+                  -%}
+                  {{ media.preview_image | image_url: width: 1600 | image_tag: class: 'main-product__image', widths: '360, 540, 720, 900, 1200, 1600', sizes: '(min-width: 750px) 48vw, calc(100vw - 20px)', loading: media_loading, fetchpriority: media_priority, alt: media.alt }}
+                {%- else -%}
+                  {% render 'product-media', media: media, loop: false, variant_image: false %}
+                {%- endif -%}
+              </div>
+            {%- else -%}
+              <div class="main-product__media-slide main-product__media-slide--primary">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg main-product__image' }}</div>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="main-product__details" id="ProductInfo-{{ section.id }}">
+          {%- if rating_value != blank -%}
+            <div class="main-product__reviews" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, rating_max: product.metafields.reviews.rating.value.scale_max }}">
+              <span class="main-product__stars" aria-hidden="true">★★★★★</span><strong>{{ rating_value }}</strong>{% if rating_count != blank %}<span>({{ rating_count }} {{ 'accessibility.total_reviews' | t | default: 'reviews' }})</span>{% endif %}
+            </div>
+          {%- endif -%}
+          <h1 class="main-product__title">{{ product.title | escape }}</h1>
+          {%- if product.metafields.custom.card_highlight.value != blank -%}<div class="main-product__highlight">{{ product.metafields.custom.card_highlight.value }}</div>{%- endif -%}
+
+          <div class="main-product__price" id="price-{{ section.id }}" role="status">
+            <span class="main-product__current-price">{{ selected_variant.price | money }}</span>
+            {%- if selected_variant.compare_at_price > selected_variant.price -%}
+              <s class="main-product__compare-price">{{ selected_variant.compare_at_price | money }}</s>
+              {%- assign saving = selected_variant.compare_at_price | minus: selected_variant.price -%}<span class="main-product__save">Save {{ saving | money }}</span>
+            {%- endif -%}
+          </div>
+
+          {%- if cart.taxes_included or shop.shipping_policy.body != blank or section.settings.product_message != blank -%}
+            <div class="main-product__message rte">
+              {%- if cart.taxes_included -%}{{ 'products.product.taxes_included' | t }}{%- endif -%}
+              {%- if shop.shipping_policy.body != blank -%} {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}{%- endif -%}
+              {%- if section.settings.product_message != blank -%}<span>{{ section.settings.product_message }}</span>{%- endif -%}
+            </div>
+          {%- endif -%}
+
+
+          {%- unless product.has_only_default_variant -%}
+            <div class="main-product__variants">{% render 'product-variant-picker', product: product, block: section, product_form_id: product_form_id %}</div>
+          {%- endunless -%}
+
+          <div class="main-product__purchase">
+            <div id="Quantity-Form-{{ section.id }}" class="main-product__quantity product-form__quantity">
+              <label class="visually-hidden" for="Quantity-{{ section.id }}">{{ 'products.product.quantity.label' | t }}</label>
+              <quantity-input class="quantity">
+                <button class="quantity__button" name="minus" type="button"><span class="visually-hidden">{{ 'products.product.quantity.decrease' | t: product: product.title }}</span><span class="svg-wrapper">{{ 'icon-minus.svg' | inline_asset_content }}</span></button>
+                <input id="Quantity-{{ section.id }}" class="quantity__input" type="number" name="quantity" value="{{ selected_variant.quantity_rule.min }}" min="{{ selected_variant.quantity_rule.min }}" data-min="{{ selected_variant.quantity_rule.min }}"{% if selected_variant.quantity_rule.max != null %} max="{{ selected_variant.quantity_rule.max }}" data-max="{{ selected_variant.quantity_rule.max }}"{% endif %} step="{{ selected_variant.quantity_rule.increment }}" form="{{ product_form_id }}">
+                <button class="quantity__button" name="plus" type="button"><span class="visually-hidden">{{ 'products.product.quantity.increase' | t: product: product.title }}</span><span class="svg-wrapper">{{ 'icon-plus.svg' | inline_asset_content }}</span></button>
+              </quantity-input>
+            </div>
+            <div class="main-product__buy-buttons">
+              {% render 'buy-buttons', block: section, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: false %}
+              <span class="main-product__atc-price" data-atc-price aria-hidden="true"{% unless selected_variant.available %} hidden{% endunless %}>{% if selected_variant.available %}· {{ selected_variant.price | money }}{% endif %}</span>
+            </div>
+            <div class="main-product__wishlist">{% render 'wishlist-button', product: product %}<span>Save to wishlist</span></div>
+          </div>
+
+          <div class="main-product__benefits">
+            {%- for block in section.blocks -%}{%- if block.type == 'benefit' and block.settings.text != blank -%}
+              <div class="main-product__benefit" style="--benefit-icon-color:{{ block.settings.icon_color }};--benefit-text-color:{{ block.settings.text_color }};--benefit-icon-size:{{ block.settings.icon_size }}px;--benefit-text-size:{{ block.settings.text_size }}px" {{ block.shopify_attributes }}>
+                {%- if block.settings.icon != 'none' -%}<span class="main-product__benefit-icon">{% render 'icons', icon: block.settings.icon %}</span>{%- endif -%}<span>{{ block.settings.text }}</span>
+              </div>
+            {%- endif -%}{%- endfor -%}
+          </div>
+
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'pincode_checker' -%}
+              <div
+                class="cust-pincode-checker"
+                data-cust-pincode-checker
+                data-endpoint="{{ block.settings.proxy_endpoint | escape }}"
+                data-show-cod="{{ block.settings.show_cod }}"
+                data-show-prepaid="{{ block.settings.show_prepaid }}"
+                data-show-location="{{ block.settings.show_location }}"
+                data-loading-text="{{ block.settings.loading_text | escape }}"
+                data-success-message="{{ block.settings.success_message | escape }}"
+                data-unavailable-message="{{ block.settings.unavailable_message | escape }}"
+                data-invalid-message="{{ block.settings.invalid_message | escape }}"
+                data-error-message="{{ block.settings.error_message | escape }}"
+                {{ block.shopify_attributes }}
+              >
+                {%- if block.settings.heading != blank -%}<h2 class="cust-pincode-checker__heading">{{ block.settings.heading | escape }}</h2>{%- endif -%}
+                {%- if block.settings.description != blank -%}<p class="cust-pincode-checker__description">{{ block.settings.description | escape }}</p>{%- endif -%}
+                <form class="cust-pincode-checker__form" data-cust-pincode-form novalidate>
+                  <label class="visually-hidden" for="CustPincode-{{ section.id }}-{{ block.id }}">Delivery pincode</label>
+                  <div class="cust-pincode-checker__row">
+                    <input class="cust-pincode-checker__input" id="CustPincode-{{ section.id }}-{{ block.id }}" name="pincode" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="6" pattern="[0-9]{6}" placeholder="{{ block.settings.input_placeholder | escape }}" aria-describedby="CustPincodeResult-{{ section.id }}-{{ block.id }}" required data-cust-pincode-input>
+                    <button class="cust-pincode-checker__button" type="submit" data-cust-pincode-submit><span data-cust-pincode-label>{{ block.settings.button_text | escape }}</span><span class="cust-pincode-checker__spinner" aria-hidden="true"></span></button>
+                  </div>
+                </form>
+                <div class="cust-pincode-checker__result" id="CustPincodeResult-{{ section.id }}-{{ block.id }}" aria-live="polite" aria-atomic="true" data-cust-pincode-result hidden></div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+
+          <div class="main-product__collapsibles">
+            {%- for block in section.blocks -%}{%- if block.type == 'collapsible' -%}
+              {%- assign panel_id = 'ProductCollapsible-' | append: section.id | append: '-' | append: block.id -%}
+              <div class="main-product__collapsible" data-product-collapsible {{ block.shopify_attributes }}>
+                <button class="main-product__collapsible-trigger" type="button" aria-expanded="{{ block.settings.open_by_default }}" aria-controls="{{ panel_id }}" data-collapsible-trigger><span>{{ block.settings.heading | escape }}</span><span class="main-product__chevron" aria-hidden="true">{{ 'icon-caret.svg' | inline_asset_content }}</span></button>
+                <div class="main-product__collapsible-panel" id="{{ panel_id }}" data-collapsible-panel><div class="main-product__collapsible-content rte">{{ block.settings.content }}</div></div>
+              </div>
+            {%- endif -%}{%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </product-component>
+</product-info>
+
+{% schema %}
+{
+  "name": "Main product",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#E64D95" },
+    { "type": "inline_richtext", "id": "product_message", "label": "Additional product message", "info": "Use only for store-supported information such as COD availability." },
+    { "type": "select", "id": "picker_type", "label": "Variant picker type", "default": "button", "options": [{ "value": "button", "label": "Buttons" }, { "value": "dropdown", "label": "Dropdown" }] },
+    { "type": "select", "id": "swatch_shape", "label": "Swatch shape", "default": "circle", "options": [{ "value": "circle", "label": "Circle" }, { "value": "square", "label": "Square" }, { "value": "none", "label": "None" }] },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show Buy now button", "default": true },
+    { "type": "checkbox", "id": "show_gift_card_recipient", "label": "Show gift-card recipient form", "default": true },
+    { "type": "header", "content": "Desktop spacing" },
+    { "type": "range", "id": "padding_top", "label": "Desktop top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "padding_bottom", "label": "Desktop bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 60 },
+    { "type": "header", "content": "Mobile spacing" },
+    { "type": "range", "id": "mobile_padding_top", "label": "Mobile top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "mobile_padding_bottom", "label": "Mobile bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 40 }
+  ],
+  "blocks": [
+    { "type": "benefit", "name": "Benefit", "limit": 4, "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "default": "truck", "options": [{ "value": "sparkles", "label": "Sparkles" }, { "value": "star", "label": "Star" }, { "value": "truck", "label": "Truck" }, { "value": "rotate", "label": "Rotate" }, { "value": "arrow-right", "label": "Arrow right" }, { "value": "none", "label": "None" }] },
+      { "type": "inline_richtext", "id": "text", "label": "Text", "default": "Product benefit" },
+      { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#E64D95" }, { "type": "color", "id": "text_color", "label": "Text color", "default": "#241226" },
+      { "type": "range", "id": "icon_size", "label": "Icon size", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 16 }, { "type": "range", "id": "text_size", "label": "Text size", "min": 10, "max": 22, "step": 1, "unit": "px", "default": 12 }
+    ] },
+    { "type": "collapsible", "name": "Collapsible row", "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Details & specs" }, { "type": "richtext", "id": "content", "label": "Content" }, { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
+    ] },
+    { "type": "pincode_checker", "name": "Pincode Checker", "limit": 1, "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Check delivery availability" },
+      { "type": "textarea", "id": "description", "label": "Description", "default": "Enter your 6-digit pincode to check delivery options." },
+      { "type": "text", "id": "input_placeholder", "label": "Input placeholder", "default": "Enter your pincode" },
+      { "type": "text", "id": "button_text", "label": "Button text", "default": "Check" },
+      { "type": "text", "id": "loading_text", "label": "Loading text", "default": "Checking availability..." },
+      { "type": "text", "id": "success_message", "label": "Success message", "default": "Delivery available to [pincode]." },
+      { "type": "text", "id": "unavailable_message", "label": "Non-serviceable message", "default": "Sorry, delivery is currently unavailable to this pincode." },
+      { "type": "text", "id": "invalid_message", "label": "Invalid pincode message", "default": "Please enter a valid 6-digit pincode." },
+      { "type": "text", "id": "error_message", "label": "API error message", "default": "We couldn't check availability right now. Please try again." },
+      { "type": "checkbox", "id": "show_cod", "label": "Show COD availability", "default": true },
+      { "type": "checkbox", "id": "show_prepaid", "label": "Show prepaid availability", "default": true },
+      { "type": "checkbox", "id": "show_location", "label": "Show city or location", "default": true },
+      { "type": "text", "id": "proxy_endpoint", "label": "Secure proxy endpoint", "info": "Same-origin Shopify app proxy path. Never enter a Delhivery token here.", "default": "/apps/delhivery-serviceability" }
+    ] }
+  ],
+  "presets": [{ "name": "Main product", "blocks": [
+    { "type": "benefit", "settings": { "icon": "truck", "text": "₹99 flat shipping, pan-India" } }, { "type": "benefit", "settings": { "icon": "star", "text": "Quality-checked before packing" } },
+    { "type": "benefit", "settings": { "icon": "sparkles", "text": "Secure payments" } }, { "type": "benefit", "settings": { "icon": "rotate", "text": "Easy support" } },
+    { "type": "collapsible", "settings": { "heading": "Details & specs" } }, { "type": "collapsible", "settings": { "heading": "Shipping & delivery" } }, { "type": "collapsible", "settings": { "heading": "Quality promise" } }
+  ] }]
+}
+{% endschema %}
