@@ -282,7 +282,14 @@
     {{ 'custom.css' | asset_url | stylesheet_tag }}
     <style>:root{--wishlist-color:{{ settings.wishlist_color | default: '#E74695' }}}</style>
     {{ 'wishlist.css' | asset_url | stylesheet_tag }}
+    <script>
+      window.ShopifyWishlistConfig = {
+        endpoint: '/apps/wishlist',
+        customerId: {% if customer %}{{ customer.id | append: '' | json }}{% else %}null{% endif %}
+      };
+    </script>
     <script src="{{ 'wishlist.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'wishlist-sync.js' | asset_url }}" defer="defer"></script>
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
