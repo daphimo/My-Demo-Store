@@ -7,6 +7,14 @@
   const gridRevisions = new WeakMap();
   const cardCache = new Map();
 
+  function debug(message, details) {
+    let enabled = Boolean(window.WISHLIST_DEBUG || window.ShopifyWishlistDebug);
+    try { enabled ||= localStorage.getItem('shopify-wishlist-debug') === 'true'; } catch (_) { /* unavailable */ }
+    if (!enabled) return;
+    if (details === undefined) console.info(`[Wishlist Debug] ${message}`);
+    else console.info(`[Wishlist Debug] ${message}`, details);
+  }
+
   function read() {
     try {
       memoryWishlist = [...new Set((localStorage.getItem(KEY) || '').split(',').filter(validHandle))].slice(0, 250);
@@ -125,6 +133,11 @@
       event.stopPropagation();
       const handles = read();
       const next = handles.includes(handle) ? handles.filter((item) => item !== handle) : [...handles, handle];
+      debug(next.includes(handle) ? 'ADD wishlist item' : 'REMOVE wishlist item', {
+        productHandle: handle,
+        wishlistBefore: handles,
+        wishlistAfter: next,
+      });
       if (write(next)) announce(`${button.dataset.productTitle || 'Product'} ${next.includes(handle) ? 'added to' : 'removed from'} wishlist.`);
       return;
     }

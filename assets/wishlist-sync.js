@@ -20,10 +20,24 @@
   let running = false;
   let queued = false;
 
+  function debugEnabled() {
+    if (window.WISHLIST_DEBUG || window.ShopifyWishlistDebug) return true;
+    try {
+      return localStorage.getItem('shopify-wishlist-debug') === 'true';
+    } catch (_) {
+      return false;
+    }
+  }
+
   function debug(message, details) {
-    if (!window.WISHLIST_DEBUG) return;
-    if (details === undefined) console.info(`[Wishlist] ${message}`);
-    else console.info(`[Wishlist] ${message}`, details);
+    if (!debugEnabled()) return;
+    if (details === undefined) console.info(`[Wishlist Debug] ${message}`);
+    else console.info(`[Wishlist Debug] ${message}`, details);
+  }
+
+  function requestId() {
+    const random = globalThis.crypto?.randomUUID?.().slice(0, 8) || Math.random().toString(36).slice(2, 10);
+    return `wishlist-debug-${Date.now()}-${random}`;
   }
 
   function read(key = KEY) {
@@ -65,23 +79,41 @@
   async function request(method, body) {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 8000);
-    debug(method === 'GET' ? 'Fetching backend wishlist' : 'Sync started', { url: endpoint, method });
+    const debugRequestId = requestId();
+    debug('API REQUEST', { requestId: debugRequestId, endpoint, method, body: body || null });
     try {
       const response = await fetch(endpoint, {
         method,
         credentials: 'same-origin',
-        headers: body ? { Accept: 'application/json', 'Content-Type': 'application/json' } : { Accept: 'application/json' },
+        headers: body
+          ? { Accept: 'application/json', 'Content-Type': 'application/json', 'X-Wishlist-Debug-Request-Id': debugRequestId }
+          : { Accept: 'application/json', 'X-Wishlist-Debug-Request-Id': debugRequestId },
         body: body ? JSON.stringify(body) : undefined,
         signal: controller.signal,
       });
+      const responseRequestId = response.headers.get('X-Wishlist-Debug-Request-Id') || debugRequestId;
       let data;
       try {
         data = await response.json();
       } catch (_) {
+        debug('API ERROR', { requestId: responseRequestId, status: response.status, error: 'INVALID_JSON_RESPONSE' });
         throw Object.assign(new Error('Backend returned invalid JSON.'), { status: response.status });
       }
-      debug('Backend response received', { status: response.status, method, wishlist: normalize(data.wishlist), error: data.error?.code });
+      debug('API RESPONSE', {
+        requestId: responseRequestId,
+        status: response.status,
+        ok: response.ok,
+        method,
+        wishlist: normalize(data.wishlist),
+        error: data.error?.code,
+      });
       if (!response.ok) {
+        debug('API ERROR', {
+          requestId: responseRequestId,
+          status: response.status,
+          error: data.error?.code || 'REQUEST_FAILED',
+          message: data.error?.message || 'Wishlist request failed.',
+        });
         throw Object.assign(new Error(data.error?.message || 'Wishlist request failed.'), {
           status: response.status,
           code: data.error?.code,
@@ -154,7 +186,13 @@
   }
 
   async function initialize() {
-    debug('Initialization started', { customerDetected: Boolean(customerId), endpoint, storageKey: KEY });
+    debug('Initializing wishlist', {
+      customerId,
+      loggedIn: Boolean(customerId),
+      customerConfigPresent: Boolean(config.customerId),
+      endpoint,
+      storageKey: KEY,
+    });
     const previousOwner = read(OWNER_KEY);
     if (!customerId) {
       if (previousOwner) {
@@ -183,7 +221,8 @@
       baseline = normalize(data.wishlist);
       const local = read();
       const merged = normalize([...local, ...baseline]);
-      debug('Merging local + remote wishlist', { local, remote: baseline, merged });
+      debug('REFRESH SYNC START', { localWishlist: local, remoteWishlist: baseline });
+      debug('SYNC RESULT', { source: 'unique-union', finalWishlist: merged });
       setOwner(customerId);
       write(merged, 'initial-merge');
       initializing = false;
