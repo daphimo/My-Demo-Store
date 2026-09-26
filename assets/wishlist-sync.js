@@ -8,7 +8,7 @@
   const RETRY_DELAYS = [1000, 3000, 10000];
   const config = window.ShopifyWishlistConfig || {};
   const customerId = config.customerId ? String(config.customerId) : null;
-  const endpoint = config.endpoint || '/apps/wishlist';
+  const endpoint = config.endpoint || '/apps/wishlist-app-672';
   const validHandle = (value) => typeof value === 'string' && /^[a-z0-9][a-z0-9-]*$/i.test(value);
   const normalize = (items) => [...new Set((Array.isArray(items) ? items : []).map((item) => typeof item === 'string' ? item.trim() : item).filter(validHandle))].slice(0, MAX_ITEMS);
   let revision = null;
