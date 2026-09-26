@@ -284,7 +284,7 @@
     {{ 'wishlist.css' | asset_url | stylesheet_tag }}
     <script>
       window.ShopifyWishlistConfig = {
-        endpoint: '/apps/wishlist-672',
+        endpoint: '/apps/wishlist',
         customerId: {% if customer %}{{ customer.id | append: '' | json }}{% else %}null{% endif %}
       };
     </script>
