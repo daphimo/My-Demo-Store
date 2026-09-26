@@ -109,7 +109,6 @@
         "accessibility_label": "Featured promotion",
         "desktop_height": 500,
         "mobile_height": 650,
-        "desktop_image": "shopify://shop_images/hero-D6qm_qxI.png",
         "desktop_image_position": "top",
         "mobile_image_position": "top",
         "overlay_color": "#ffffff",
@@ -120,14 +119,81 @@
     "quiz_popup_home": {
       "type": "quiz-popup",
       "blocks": {
-        "quiz_option_1": { "type": "option", "settings": { "icon": "sparkles", "pill": "AESTHETIC FINDS", "title": "For Me ✨", "content": "Teen / College girlie", "link": "", "background": "#f8e5f6" } },
-        "quiz_option_2": { "type": "option", "settings": { "icon": "briefcase", "pill": "OFFICE AESTHETIC", "title": "Working Babe 💼", "content": "Young working woman", "link": "", "background": "#f7e7f1" } },
-        "quiz_option_3": { "type": "option", "settings": { "icon": "baby", "pill": "KID-APPROVED", "title": "Mom → Kids 🎀", "content": "Gifting my little one", "link": "", "background": "#f7dcf0" } },
-        "quiz_option_4": { "type": "option", "settings": { "icon": "flower", "pill": "SELF-LOVE", "title": "Mom → Me 🌸", "content": "A little something for myself", "link": "", "background": "#f3d8f8" } },
-        "quiz_option_5": { "type": "option", "settings": { "icon": "gift", "pill": "BESTIE-APPROVED", "title": "Gift for a Friend 🎁", "content": "Something cute for my bestie", "link": "", "background": "#f9dce4" } },
-        "quiz_option_6": { "type": "option", "settings": { "icon": "party-popper", "pill": "PARTY READY", "title": "Birthday Return Gifts 🎉", "content": "Mom planning party favors", "link": "", "background": "#f5e7f6" } }
+        "quiz_option_1": {
+          "type": "option",
+          "settings": {
+            "icon": "sparkles",
+            "pill": "AESTHETIC FINDS",
+            "title": "For Me ✨",
+            "content": "Teen / College girlie",
+            "link": "",
+            "background": "#f8e5f6"
+          }
+        },
+        "quiz_option_2": {
+          "type": "option",
+          "settings": {
+            "icon": "briefcase",
+            "pill": "OFFICE AESTHETIC",
+            "title": "Working Babe 💼",
+            "content": "Young working woman",
+            "link": "",
+            "background": "#f7e7f1"
+          }
+        },
+        "quiz_option_3": {
+          "type": "option",
+          "settings": {
+            "icon": "baby",
+            "pill": "KID-APPROVED",
+            "title": "Mom → Kids 🎀",
+            "content": "Gifting my little one",
+            "link": "",
+            "background": "#f7dcf0"
+          }
+        },
+        "quiz_option_4": {
+          "type": "option",
+          "settings": {
+            "icon": "flower",
+            "pill": "SELF-LOVE",
+            "title": "Mom → Me 🌸",
+            "content": "A little something for myself",
+            "link": "",
+            "background": "#f3d8f8"
+          }
+        },
+        "quiz_option_5": {
+          "type": "option",
+          "settings": {
+            "icon": "gift",
+            "pill": "BESTIE-APPROVED",
+            "title": "Gift for a Friend 🎁",
+            "content": "Something cute for my bestie",
+            "link": "",
+            "background": "#f9dce4"
+          }
+        },
+        "quiz_option_6": {
+          "type": "option",
+          "settings": {
+            "icon": "party-popper",
+            "pill": "PARTY READY",
+            "title": "Birthday Return Gifts 🎉",
+            "content": "Mom planning party favors",
+            "link": "",
+            "background": "#f5e7f6"
+          }
+        }
       },
-      "block_order": ["quiz_option_1", "quiz_option_2", "quiz_option_3", "quiz_option_4", "quiz_option_5", "quiz_option_6"],
+      "block_order": [
+        "quiz_option_1",
+        "quiz_option_2",
+        "quiz_option_3",
+        "quiz_option_4",
+        "quiz_option_5",
+        "quiz_option_6"
+      ],
       "name": "Quiz popup",
       "settings": {
         "trigger_pill": "30-SEC QUIZ",
@@ -201,7 +267,7 @@
       "type": "featured-collection",
       "name": "Featured collection",
       "settings": {
-        "collection": "just-in-newly-added-products",
+        "collection": "new-arrivals",
         "caption": "JUST DROPPED",
         "title": "New arrivals you'll love 🌸",
         "view_more_text": "VIEW MORE",
@@ -225,7 +291,6 @@
           "type": "featured_collection",
           "settings": {
             "collection": "bundle-_-premium_bottle",
-            "image": "shopify://shop_images/cat-bottles-DrhOIdpQ.png",
             "title": "Bottles"
           }
         },
@@ -233,7 +298,6 @@
           "type": "featured_collection",
           "settings": {
             "collection": "stationery",
-            "image": "shopify://shop_images/cat-stationery-D_Z7RHIt.png",
             "title": "Stationery"
           }
         },
@@ -241,7 +305,6 @@
           "type": "featured_collection",
           "settings": {
             "collection": "keychains-charms",
-            "image": "shopify://shop_images/cat-keychains-CcOpE2eZ.png",
             "title": "Keychains"
           }
         },
@@ -249,7 +312,6 @@
           "type": "featured_collection",
           "settings": {
             "collection": "jewellery",
-            "image": "shopify://shop_images/cat-jewellery-D8dBjPvW.png",
             "title": "Jewellery"
           }
         },
@@ -257,7 +319,6 @@
           "type": "featured_collection",
           "settings": {
             "collection": "clearance",
-            "image": "shopify://shop_images/cat-makeup-CPj42e6q.png",
             "title": "Makeup"
           }
         },
@@ -265,7 +326,6 @@
           "type": "featured_collection",
           "settings": {
             "collection": "gift-sets",
-            "image": "shopify://shop_images/cat-bundles-BC3pKoCc.png",
             "title": "Gifts"
           }
         }
@@ -304,7 +364,7 @@
       "type": "featured-collection",
       "name": "Featured collection",
       "settings": {
-        "collection": "best-sellers",
+        "collection": "new-arrivals",
         "caption": "BESTSELLERS",
         "title": "Everyone's little obsessions 🌸",
         "view_more_text": "VIEW MORE",
@@ -338,7 +398,7 @@
           "settings": {
             "content": "<p>A bottle for your commute.<br>A notebook for your thoughts.<br>A little charm for your bag.<br>Beautiful things for the moments you live every day.</p>",
             "content_size": 15,
-            "content_color": "#7A5368"
+            "content_color": "#7a5368"
           }
         },
         "button_kfmFWJ": {
@@ -360,10 +420,9 @@
       ],
       "name": "Image with text",
       "settings": {
-        "image": "shopify://shop_images/lifestyle-CU2FVmzE.png",
         "image_position": "left",
         "image_object_position": "center",
-        "background_color": "#FFFFFF",
+        "background_color": "#ffffff",
         "padding_top": 40,
         "padding_bottom": 40,
         "mobile_padding_top": 24,
@@ -379,11 +438,11 @@
             "text": "☕ Slow mornings",
             "link": "",
             "text_size": 13,
-            "background": "#FFFFFF",
-            "border_color": "#F4C3DA",
-            "text_color": "#2A0F1C",
-            "hover_background": "#E64D95",
-            "hover_text_color": "#FFFFFF"
+            "background": "#ffffff",
+            "border_color": "#f4c3da",
+            "text_color": "#2a0f1c",
+            "hover_background": "#e64d95",
+            "hover_text_color": "#ffffff"
           }
         },
         "pill_8VNe3e": {
@@ -392,11 +451,11 @@
             "text": "📓 Fresh pages",
             "link": "",
             "text_size": 13,
-            "background": "#FFFFFF",
-            "border_color": "#F4C3DA",
-            "text_color": "#2A0F1C",
-            "hover_background": "#E64D95",
-            "hover_text_color": "#FFFFFF"
+            "background": "#ffffff",
+            "border_color": "#f4c3da",
+            "text_color": "#2a0f1c",
+            "hover_background": "#e64d95",
+            "hover_text_color": "#ffffff"
           }
         },
         "pill_jipYLn": {
@@ -405,11 +464,11 @@
             "text": "💻 Work days",
             "link": "",
             "text_size": 13,
-            "background": "#FFFFFF",
-            "border_color": "#F4C3DA",
-            "text_color": "#2A0F1C",
-            "hover_background": "#E64D95",
-            "hover_text_color": "#FFFFFF"
+            "background": "#ffffff",
+            "border_color": "#f4c3da",
+            "text_color": "#2a0f1c",
+            "hover_background": "#e64d95",
+            "hover_text_color": "#ffffff"
           }
         },
         "pill_twtY96": {
@@ -418,11 +477,11 @@
             "text": "🎧 Commutes",
             "link": "",
             "text_size": 13,
-            "background": "#FFFFFF",
-            "border_color": "#F4C3DA",
-            "text_color": "#2A0F1C",
-            "hover_background": "#E64D95",
-            "hover_text_color": "#FFFFFF"
+            "background": "#ffffff",
+            "border_color": "#f4c3da",
+            "text_color": "#2a0f1c",
+            "hover_background": "#e64d95",
+            "hover_text_color": "#ffffff"
           }
         },
         "pill_7f4Nwg": {
@@ -431,11 +490,11 @@
             "text": "🌷 Getting ready",
             "link": "",
             "text_size": 13,
-            "background": "#FFFFFF",
-            "border_color": "#F4C3DA",
-            "text_color": "#2A0F1C",
-            "hover_background": "#E64D95",
-            "hover_text_color": "#FFFFFF"
+            "background": "#ffffff",
+            "border_color": "#f4c3da",
+            "text_color": "#2a0f1c",
+            "hover_background": "#e64d95",
+            "hover_text_color": "#ffffff"
           }
         },
         "pill_4UNgwW": {
@@ -444,11 +503,11 @@
             "text": "🎁 Giving gifts",
             "link": "",
             "text_size": 13,
-            "background": "#FFFFFF",
-            "border_color": "#F4C3DA",
-            "text_color": "#2A0F1C",
-            "hover_background": "#E64D95",
-            "hover_text_color": "#FFFFFF"
+            "background": "#ffffff",
+            "border_color": "#f4c3da",
+            "text_color": "#2a0f1c",
+            "hover_background": "#e64d95",
+            "hover_text_color": "#ffffff"
           }
         },
         "pill_CNgmFY": {
@@ -457,11 +516,11 @@
             "text": "🌞 Little everyday moments",
             "link": "",
             "text_size": 13,
-            "background": "#FFFFFF",
-            "border_color": "#F4C3DA",
-            "text_color": "#2A0F1C",
-            "hover_background": "#E64D95",
-            "hover_text_color": "#FFFFFF"
+            "background": "#ffffff",
+            "border_color": "#f4c3da",
+            "text_color": "#2a0f1c",
+            "hover_background": "#e64d95",
+            "hover_text_color": "#ffffff"
           }
         }
       },
@@ -477,11 +536,11 @@
       "name": "Pill links",
       "settings": {
         "caption": "THE COCOPOCO LIFE",
-        "caption_color": "#7A5368",
+        "caption_color": "#7a5368",
         "title": "Things worth romanticizing 🌸",
         "title_size": 32,
-        "title_color": "#2A0F1C",
-        "background_color": "#FFFFFF",
+        "title_color": "#2a0f1c",
+        "background_color": "#ffffff",
         "alignment": "center",
         "padding_top": 40,
         "padding_bottom": 40,
@@ -506,7 +565,7 @@
           "settings": {
             "content": "<p>For birthdays. For celebrations. For thank-yous. For besties. For family. For “I saw this and thought of you.” Or simply because.</p>",
             "content_size": 15,
-            "content_color": "#7A5368"
+            "content_color": "#7a5368"
           }
         },
         "icon_text_qTjEn6": {
@@ -514,7 +573,7 @@
           "settings": {
             "icon": "truck",
             "text": "Beautiful things for everyday moments",
-            "icon_color": "#E64D95",
+            "icon_color": "#e64d95",
             "text_color": "#241226",
             "icon_size": 16,
             "text_size": 14
@@ -537,7 +596,7 @@
             "text": "Talk to us for custom orders",
             "link": "#",
             "background": "#ffffff",
-            "text_color": "#E34C93",
+            "text_color": "#e34c93",
             "show_arrow": false,
             "open_in_new_tab": false
           }
@@ -552,10 +611,9 @@
       ],
       "name": "Image with text",
       "settings": {
-        "image": "shopify://shop_images/gifting-CVgp4Sao.png",
         "image_position": "right",
         "image_object_position": "center",
-        "background_color": "#FFFFFF",
+        "background_color": "#ffffff",
         "padding_top": 40,
         "padding_bottom": 40,
         "mobile_padding_top": 24,
@@ -604,15 +662,15 @@
       "name": "Testimonials",
       "settings": {
         "caption": "CUSTOMER LOVE",
-        "caption_color": "#7A5368",
+        "caption_color": "#7a5368",
         "title": "Tiny things. Very big smiles. 💌",
         "title_size": 32,
-        "title_color": "#2A0F1C",
-        "background_color": "#FFFFFF",
-        "card_background": "#FFFFFF",
-        "star_color": "#E64D95",
-        "text_color": "#2A0F1C",
-        "meta_color": "#7A5368",
+        "title_color": "#2a0f1c",
+        "background_color": "#ffffff",
+        "card_background": "#ffffff",
+        "star_color": "#e64d95",
+        "text_color": "#2a0f1c",
+        "meta_color": "#7a5368",
         "text_size": 13,
         "padding_top": 40,
         "padding_bottom": 40,
@@ -624,7 +682,7 @@
       "type": "featured-collection",
       "name": "Featured collection",
       "settings": {
-        "collection": "bundles",
+        "collection": "new-arrivals",
         "caption": "BUNDLES",
         "title": "Why pick one? 💕",
         "view_more_text": "VIEW MORE",
@@ -650,7 +708,7 @@
             "title": "Welcome to CocoPoco. 🌸",
             "heading_tag": "h2",
             "size": 32,
-            "color": "#2A0F1C"
+            "color": "#2a0f1c"
           }
         },
         "content_hBHinX": {
@@ -658,7 +716,7 @@
           "settings": {
             "content": "<p>We believe you don't need a special occasion to make an ordinary day feel special. So we collect little things that make you smile — things that add colour to your desk, personality to your bag, joy to your routine and a little magic to your everyday.</p>",
             "size": 16,
-            "color": "#3D1729"
+            "color": "#3d1729"
           }
         },
         "content_rQW8en": {
@@ -666,7 +724,7 @@
           "settings": {
             "content": "<p><strong>Because life is made of little moments. We think they deserve a little more love.</strong></p>",
             "size": 18,
-            "color": "#3D1729"
+            "color": "#3d1729"
           }
         },
         "buttons_QLHQzQ": {
@@ -674,14 +732,14 @@
           "settings": {
             "button_1_text": "Our Story",
             "button_1_link": "",
-            "button_1_background": "#3D1729",
-            "button_1_text_color": "#FFFFFF",
+            "button_1_background": "#3d1729",
+            "button_1_text_color": "#ffffff",
             "button_1_arrow": true,
             "button_1_new_tab": false,
             "button_2_text": "",
             "button_2_link": "",
-            "button_2_background": "#FFFFFF",
-            "button_2_text_color": "#3D1729",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#3d1729",
             "button_2_arrow": false,
             "button_2_new_tab": false
           }
@@ -695,7 +753,7 @@
       ],
       "name": "Custom rich text",
       "settings": {
-        "background_color": "#FAD7E9",
+        "background_color": "#fad7e9",
         "content_width": 760,
         "padding_top": 40,
         "padding_bottom": 36
@@ -707,7 +765,6 @@
         "image_BnqPN9": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/hero-D6qm_qxI.png",
             "link": "",
             "open_in_new_tab": false
           }
@@ -715,7 +772,6 @@
         "image_yfbnWH": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/lifestyle-CU2FVmzE.png",
             "link": "",
             "open_in_new_tab": false
           }
@@ -723,7 +779,6 @@
         "image_JABLCf": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/gifting-CVgp4Sao.png",
             "link": "",
             "open_in_new_tab": false
           }
@@ -731,7 +786,6 @@
         "image_rQQqnp": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/hero-D6qm_qxI.png",
             "link": "",
             "open_in_new_tab": false
           }
@@ -739,7 +793,6 @@
         "image_hGD8wx": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/lifestyle-CU2FVmzE.png",
             "link": "",
             "open_in_new_tab": false
           }
@@ -747,7 +800,6 @@
         "image_BTbV6U": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/gifting-CVgp4Sao.png",
             "link": "",
             "open_in_new_tab": false
           }
@@ -764,18 +816,18 @@
       "name": "Instafeed gallery",
       "settings": {
         "caption": "@COCOPOCO",
-        "caption_color": "#7A5368",
+        "caption_color": "#7a5368",
         "title": "Your everyday, but cuter. 📸",
         "title_size": 30,
-        "title_color": "#2A0F1C",
+        "title_color": "#2a0f1c",
         "description": "<p>Customer photos • Unboxings • Desk setups • Bag dumps • Gifting moments • Journaling</p>",
         "description_size": 12,
-        "description_color": "#7A5368",
-        "background_color": "#FFFFFF",
+        "description_color": "#7a5368",
+        "background_color": "#ffffff",
         "button_label": "Follow the fun",
         "button_link": "",
-        "button_background": "#FFFFFF",
-        "button_text_color": "#2A0F1C",
+        "button_background": "#ffffff",
+        "button_text_color": "#2a0f1c",
         "button_show_arrow": true,
         "button_open_in_new_tab": true,
         "padding_top": 40,
@@ -793,7 +845,7 @@
             "title": "Your everyday called. It wants more joy. ✨",
             "heading_tag": "h2",
             "title_size": 26,
-            "title_color": "#FFFFFF"
+            "title_color": "#ffffff"
           }
         },
         "content_mEtr49": {
@@ -801,7 +853,7 @@
           "settings": {
             "content": "<p>Join our list for joyful finds, new arrivals, and special offers.</p>",
             "content_size": 15,
-            "content_color": "#E8DCE1"
+            "content_color": "#e8dce1"
           }
         },
         "email_form_MNfFDn": {
@@ -809,8 +861,8 @@
           "settings": {
             "placeholder": "Enter your email",
             "button_label": "Join the fun",
-            "button_background": "#E94791",
-            "button_text_color": "#FFFFFF",
+            "button_background": "#e94791",
+            "button_text_color": "#ffffff",
             "show_arrow": true,
             "success_message": "Thanks for signing up!"
           }
@@ -844,8 +896,8 @@
       ],
       "name": "Custom email signup",
       "settings": {
-        "background_color": "#3A1928",
-        "text_color": "#FFFFFF",
+        "background_color": "#3a1928",
+        "text_color": "#ffffff",
         "border_radius": 26,
         "margin_top": 28,
         "margin_bottom": 44
